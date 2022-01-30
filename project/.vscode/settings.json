@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "board.h": "c",
+        "gd32e23x.h": "c",
+        "stdio.h": "c",
+        "system_gd32e23x.h": "c",
+        "usart.h": "c",
+        "hal_usart.h": "c",
+        "gd32e23x_usart.h": "c",
+        "adc.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}

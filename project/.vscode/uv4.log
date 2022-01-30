@@ -1,0 +1,7 @@
+*** Using Compiler 'V6.16', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'demo'
+compiling main.c...
+linking...
+Program Size: Code=6190 RO-data=254 RW-data=4 ZI-data=1036  
+".\output\GD32E230C_START.axf" - 0 Error(s), 0 Warning(s).
+Build Time Elapsed:  00:00:01
