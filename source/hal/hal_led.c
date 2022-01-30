@@ -5,12 +5,8 @@ void hal_led_init(void)
    bsp_led_init();
 }
 
-void hal_led_test_on(void)
+uint8_t hal_led_control(uint8_t led,uint8_t state)
 {
-	bsp_led_test_on();
+	return bsp_led_control(led,state);
 }
 
-void hal_led_test_off(void)
-{
-	bsp_led_test_off();
-}

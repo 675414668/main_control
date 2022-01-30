@@ -4,8 +4,7 @@
 #include "led.h"
 
 void hal_led_init(void);
-void hal_led_test_on(void);
-void hal_led_test_off(void);
+uint8_t hal_led_control(uint8_t led,uint8_t state);
 #endif 
 
 
