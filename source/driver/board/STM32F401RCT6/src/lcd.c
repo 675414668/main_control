@@ -4,7 +4,7 @@ void bsp_lcd_gpio_init(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
 	
-	RCC_AHB1PeriphClockCmd(LCD_CONTROL_RCU, ENABLE);//使能PORTA~E,PORTG时钟
+	RCC_AHB1PeriphClockCmd(LCD_CONTROL_RCU, ENABLE);
 
   GPIO_InitStructure.GPIO_Pin = LCD_CONTROL_RES|LCD_CONTROL_DC|LCD_CONTROL_BLK|LCD_CONTROL_CS1|LCD_CONTROL_CS2 ;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
