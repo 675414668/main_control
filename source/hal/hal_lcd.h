@@ -3,8 +3,6 @@
 
 #include "lcd.h"
 #include "hal_delay.h"
-#include "dma.h"
-#include "spi.h"
 
 //»­±ÊÑÕÉ«
 #define WHITE         	 0xFFFF

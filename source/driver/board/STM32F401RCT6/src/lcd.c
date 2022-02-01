@@ -1,6 +1,4 @@
 #include "lcd.h"
-#include "spi.h"
-#include "dma.h"
 
 void bsp_lcd_gpio_init(void)
 {

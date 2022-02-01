@@ -2,8 +2,6 @@
 #define __HAL_LCD_FONT_H
 
 #include "lcd.h"
-#include "dma.h"
-#include "spi.h"
 
 void hal_lcd_font_command(uint8_t dat);
 uint8_t hal_lcd_font_get_data(void);
