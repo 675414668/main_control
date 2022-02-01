@@ -41,3 +41,27 @@ uint8_t bsp_sys_clk_init(void)
 			return ERROR;
 		}
 }
+
+uint32_t bsp_get_clock_frequency(uint8_t clk)
+{
+	if(clk == SYSCLK_FREQUENCY)
+	{
+		return get_rcc_clock.SYSCLK_Frequency;
+	}
+	else if(clk == HCLK_FREQUENCY)
+	{
+		return get_rcc_clock.HCLK_Frequency;
+	}
+	else if(clk == PCLK1_FREQUENCY)
+	{
+		return get_rcc_clock.PCLK1_Frequency;
+	}
+	else if(clk == PCLK2_FREQUENCY)
+	{
+		return get_rcc_clock.PCLK2_Frequency;
+	}
+	else
+	{
+		return ERROR;
+	}
+}
