@@ -88,7 +88,7 @@ void bsp_lcd_write_reg(uint8_t dat)
 {
 	LCD_DC_RESET();//写命令
 	bsp_lcd_write_bus(dat);
-	LCD_CS1_SET();//写数据
+	LCD_DC_SET();//写数据
 }
 
 
