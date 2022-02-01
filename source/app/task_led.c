@@ -1,35 +1,50 @@
 #include "task_led.h"
 
-#ifdef CHIP_STM32F103C8T6
-static void task_led_test(void *pvParameters);
-
-static void task_led_test(void *pvParameters)
+typedef struct 
 {
-   while(1)
-	 {
-		 hal_led_test_on();
-		 osal_msleep(1000);
-		 hal_led_test_off();
-		 osal_msleep(1000);
-	 }
+	uint8_t led1;
+	uint8_t led2;
+}led_state_t;
+led_state_t led_state;
 
-}
-#elif CHIP_GD32F130C8T6
-void task_led_test(void)
-{
-	hal_led_test_on();
-	hal_delay_ms(1000);
-	hal_led_test_off();
-	hal_delay_ms(1000);
-}
-#endif
+static void led_data_init(void);
 
 void task_led_init(void)
 {
 	hal_led_init();
-	
-	#ifdef CHIP_STM32F103C8T6
-	osal_task_creats(task_led_test,NULL,130,1);
-  #elif CHIP_GD32F130C8T6
-  #endif
+	led_data_init();
 }
+
+static void led_data_init(void)
+{
+	led_state.led1 = LED_OFF;
+	led_state.led2 = LED_ON;
+}
+
+void task_led(void)
+{
+	if(led_state.led1 == LED_ON)
+	{
+	 hal_led_control(LED1,LED_OFF);
+		led_state.led1 = LED_OFF;
+	}
+	else
+	{
+	 hal_led_control(LED1,LED_ON);
+		led_state.led1 = LED_ON;
+	}
+	if(led_state.led2 == LED_ON)
+	{
+	 hal_led_control(LED2,LED_OFF);
+		led_state.led2 = LED_OFF;
+	}
+	else
+	{
+	 hal_led_control(LED2,LED_ON);
+		led_state.led2 = LED_ON;
+	}
+ 
+}
+
+
+
