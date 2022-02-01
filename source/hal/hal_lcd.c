@@ -9,35 +9,16 @@
       返回值：  无
 ******************************************************************************/
 void hal_lcd_fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color)
-{          
-	uint16_t color1[1],t=1;
-	uint32_t num,num1;
-	color1[0]=color;
-	num=(xend-xsta)*(yend-ysta);
+{
+	u16 i,j; 
 	bsp_lcd_set_addr(xsta,ysta,xend-1,yend-1);//设置显示范围
-	LCD_CS_Clr();
-	bsp_lcd_spi_transfer_16bit();
-	bsp_lcd_spi_enable();//使能SPI
-	while(t)
-	{
-		if(num>65534)
+	for(i=ysta;i<yend;i++)
+	{													   	 	
+		for(j=xsta;j<xend;j++)
 		{
-			num-=65534;
-			num1=65534;
+			bsp_lcd_write_16bit(color);
 		}
-		else
-		{
-			t=0;
-			num1=num;
-		}
-		bsp_lcd_dma_fill_init((uint32_t)color1,num1);
-		bsp_lcd_spi_dma_enable();
-		bsp_lcd_dma_enable();
-    bsp_lcd_dma_transfer_finished();
-  }
-	LCD_CS_Set();
-	bsp_lcd_spi_transfer_8bit();
-	bsp_lcd_spi_enable();//使能SPI
+	} 	
 }
 
 void hal_lcd_draw_fill(uint16_t color)
@@ -580,29 +561,18 @@ void hal_lcd_show_float_num(uint16_t x,uint16_t y,float num,uint8_t len,uint16_t
 ******************************************************************************/
 void hal_lcd_show_picture(uint16_t x,uint16_t y,uint16_t length,uint16_t width,const uint8_t pic[])
 {
-	uint8_t t=1;
-	uint32_t num=length*width*2,num1;
+	uint16_t i,j;
+	uint32_t k=0;
 	bsp_lcd_set_addr(x,y,x+length-1,y+width-1);
-	LCD_CS_Clr();
-	while(t)
+	for(i=0;i<length;i++)
 	{
-	  if(num>65534)
+		for(j=0;j<width;j++)
 		{
-			num-=65534;
-			num1=65534;
+			bsp_lcd_write_8bit(pic[k*2]);
+			bsp_lcd_write_8bit(pic[k*2+1]);
+			k++;
 		}
-		else
-		{
-			t=0;
-			num1=num;
-		}
-		bsp_lcd_dma_picture_init((uint32_t)pic,num1);
-		bsp_lcd_spi_dma_enable();;
-		bsp_lcd_dma_enable();
-    bsp_lcd_dma_transfer_finished();
-		pic+=65534;
-	}
-	LCD_CS_Set();
+	}		
 }
 
 

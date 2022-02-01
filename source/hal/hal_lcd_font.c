@@ -7,7 +7,21 @@ uint8_t FontBuf[130];//字库缓存
 ******************************************************************************/
 void hal_lcd_font_command(uint8_t dat)
 {
-	bsp_lcd_spi_rw_byte(dat);
+		uint8_t i; 
+	for(i=0;i<8;i++)
+	{			  
+		LCD_SCK_RESET();
+		if(dat&0x80)
+		{
+		   LCD_SDA_SET();
+		}
+		else
+		{
+		   LCD_SDA_RESET();
+		}
+		LCD_SCK_SET();
+		dat<<=1;
+	}
 }
 
 /******************************************************************************
@@ -17,7 +31,19 @@ void hal_lcd_font_command(uint8_t dat)
 ******************************************************************************/
 uint8_t hal_lcd_font_get_data(void)
 {
-	return bsp_lcd_spi_rw_byte(0xff);
+		uint8_t i;
+	uint8_t ret_data=0; //返回数据初始化
+	for(i=0;i<8;i++)
+	{
+		LCD_SCK_RESET();  //字库时钟拉低  
+		ret_data<<=1;
+		if(LCD_MISO_READ)
+		{
+			ret_data++;
+		}
+		LCD_SCK_SET(); //字库时钟拉高
+	}
+	return ret_data;    //返回读出的一个字节
 }
  
 /******************************************************************************
@@ -32,7 +58,7 @@ uint8_t hal_lcd_font_get_data(void)
 void hal_lcd_font_get_nbyte_data(uint8_t AddrHigh,uint8_t AddrMid,uint8_t AddrLow,uint8_t *pBuff,uint8_t DataLen)
 {
  	uint8_t i;
-	ZK_CS_Clr(); //字库片选
+	LCD_CS2_RESET(); //字库片选
 	hal_lcd_font_command(0x03);//写指令
 	hal_lcd_font_command(AddrHigh);//写地址高字节
 	hal_lcd_font_command(AddrMid);//写地址中字节
@@ -42,7 +68,7 @@ void hal_lcd_font_get_nbyte_data(uint8_t AddrHigh,uint8_t AddrMid,uint8_t AddrLo
 	   *(pBuff+i) =hal_lcd_font_get_data();//读一个字节数据
 	}
 
-	ZK_CS_Set();//取消字库片选
+	LCD_CS2_SET();//取消字库片选
 }
 
 /******************************************************************************

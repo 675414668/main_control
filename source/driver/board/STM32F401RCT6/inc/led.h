@@ -4,6 +4,7 @@
 #include "stm32f4xx.h"
 #include "string.h"
 
+#define LED_RCC   RCC_AHB1Periph_GPIOC
 #define LED_PORT  GPIOC
 #define LED1_PIN  GPIO_Pin_4
 #define LED2_PIN  GPIO_Pin_5

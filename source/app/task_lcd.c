@@ -1,20 +1,7 @@
 #include "task_lcd.h"
-
+#include "pic.h"
 #define BACK_COLOR  0x0000
 
-
-void task_lcd_display(void)
-{
-	uint8_t lcd_usart_string_data[127*3];
-	uint8_t lcd_time_data[14];
-
-	hal_timer_display(lcd_time_data);
-	//bsp_get_stopwatch_time_buff(lcd_time_data);
-  hal_uasrt_hex_display(lcd_usart_string_data);
-	//hal_uasrt_dec_display(lcd_string_data);
-	hal_lcd_show_string(30,0,lcd_time_data,BRRED,BACK_COLOR,12,0);
-	//hal_lcd_show_string(30,0,lcd_usart_string_data,BRRED,BACK_COLOR,12,0);
-}
 
 void task_lcd_init(void)
 {
@@ -22,3 +9,37 @@ void task_lcd_init(void)
 	hal_lcd_draw_fill(BACK_COLOR);
 
 }
+
+
+void task_lcd_display(void)
+{
+	hal_lcd_show_picture(115,99,45,38,gImage_0);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_1);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_2);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_3);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_4);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_5);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_6);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_7);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_8);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_9);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_10);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_11);
+	hal_delay_ms(20);
+	hal_lcd_show_picture(115,99,45,38,gImage_12);
+	hal_delay_ms(20);
+  hal_lcd_show_picture(115,99,45,38,gImage_13);
+	hal_delay_ms(20);
+}
+

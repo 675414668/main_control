@@ -14,7 +14,7 @@ static void bsp_led_gpio_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	RCC_AHB1PeriphClockCmd(LED_RCC, ENABLE);
 	
   GPIO_InitStructure.GPIO_Pin = LED1_PIN;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
