@@ -1,10 +1,9 @@
-#include "hal_delay.h"
-#include "hal_led.h"
-#include "hal_key.h"
+#include "hal.h"
 #include "task_lcd.h"
 
 int main(void)
 {
+	hal_init();
 	hal_delay_init();
 	hal_led_init();
 	hal_key_init();

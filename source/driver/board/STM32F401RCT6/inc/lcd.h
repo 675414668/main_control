@@ -18,6 +18,8 @@
 #define LCD_CONTROL_MISO      GPIO_Pin_6
 #define LCD_CONTROL_SDA       GPIO_Pin_7
 
+#define LCD_SPI               SPI1
+#define LCD_SPI_RCU           RCC_APB2Periph_SPI1
 
 
 #define USE_HORIZONTAL 2  //设置横屏或者竖屏显示 0或1为竖屏 2或3为横屏
