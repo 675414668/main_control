@@ -5,6 +5,7 @@ enum
 {
 	DISPLAY_INIT=0,
 	DISPLAY_ASTRONAUT,
+	DISPLAY_MENU,
 };
 
 typedef struct 
@@ -15,12 +16,35 @@ lcd_display_t lcd_display;
 
 static void lcd_show_init(void);
 static void lcd_show_astronaut(void);
+static void lcd_show_menu(void);
 
 void task_lcd_init(void)
 {
 	hal_lcd_init();
-	hal_lcd_draw_fill(BLACK);
+	hal_lcd_fill(0,0,280,240,BLACK);
 	lcd_display.state=DISPLAY_INIT;
+}
+
+void task_lcd_display(void)
+{
+	switch(lcd_display.state)
+	{
+		case DISPLAY_INIT:     { lcd_show_init();          break ;}
+		case DISPLAY_ASTRONAUT:{ lcd_show_astronaut();     break ;}
+		case DISPLAY_MENU:     { lcd_show_menu();          break ;}
+		default: {break;}
+			
+	}
+}
+
+uint8_t lcd_get_display_state(void)
+{
+	return lcd_display.state;
+}
+
+void lcd_set_display_state(uint8_t state)
+{
+	lcd_display.state=state;
 }
 
 static void lcd_show_init(void)
@@ -55,14 +79,10 @@ static void lcd_show_astronaut(void)
   hal_lcd_show_picture(235,200,45,38,gImage_13);
 }
 
-void task_lcd_display(void)
+static void lcd_show_menu(void)
 {
-	switch(lcd_display.state)
-	{
-		case DISPLAY_INIT:{ lcd_show_init();               break ;}
-		case DISPLAY_ASTRONAUT:{ lcd_show_astronaut();     break ;}
-		default: {break;}
-			
-	}
+	hal_lcd_fill(0,0,280,145,BLACK);
+	
+	lcd_display.state=DISPLAY_ASTRONAUT;//Ìø×ªµ½Óîº½Ô±
 }
 

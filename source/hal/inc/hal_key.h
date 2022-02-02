@@ -5,4 +5,5 @@
 
 void hal_key_init(void);
 uint8_t hal_get_key_press(void);
+void hal_set_key_press(uint8_t state);
 #endif 

@@ -17,8 +17,12 @@
 #define KEY_TIM_IRQN           TIM3_IRQn
 #define KEY_TIM_IRQHANDLER     TIM3_IRQHandler
 
+#define KEY_S_TIM  (10)
+#define KEY_L_TIM  (200)
+
 //TIM_OUT = KEY_TIM_PERIOD*(KEY_TIM_PRESCALER+1)/84 =10MS
 
 void bsp_key_init(void);
 uint8_t bsp_get_key_press(void);
+void bsp_set_key_press(uint8_t state);
 #endif 

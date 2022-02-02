@@ -76,8 +76,8 @@ static void bsp_key_scan(void)
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY1_PIN)==0)
 	{
 		key_crl.key1_count++;
-		if(key_crl.key1_count==50)       key_crl.press = KEY1_S;
-		else if(key_crl.key1_count==200) key_crl.press = KEY1_L;
+		if(key_crl.key1_count==KEY_S_TIM)       key_crl.press = KEY1_S;
+		else if(key_crl.key1_count==KEY_L_TIM)  key_crl.press = KEY1_L;
 	}
 	else
 	{
@@ -86,8 +86,8 @@ static void bsp_key_scan(void)
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY2_PIN)==0)
 	{
 		key_crl.key2_count++;
-		if(key_crl.key2_count==50)       key_crl.press = KEY2_S;
-		else if(key_crl.key2_count==200) key_crl.press = KEY2_L;
+		if(key_crl.key2_count==KEY_S_TIM)       key_crl.press = KEY2_S;
+		else if(key_crl.key2_count==KEY_L_TIM)  key_crl.press = KEY2_L;
 	}
 	else
 	{
@@ -96,8 +96,8 @@ static void bsp_key_scan(void)
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY3_PIN)==0)
 	{
 		key_crl.key3_count++;
-	  if(key_crl.key3_count==50)       key_crl.press = KEY3_S;
-		else if(key_crl.key3_count==200) key_crl.press = KEY3_L;
+	  if(key_crl.key3_count==KEY_S_TIM)       key_crl.press = KEY3_S;
+		else if(key_crl.key3_count==KEY_L_TIM)  key_crl.press = KEY3_L;
 	}
 	else
 	{
@@ -109,6 +109,12 @@ uint8_t bsp_get_key_press(void)
 {
 	return key_crl.press;
 }
+
+void bsp_set_key_press(uint8_t state)
+{
+	key_crl.press=state;
+}
+	
 void KEY_TIM_IRQHANDLER(void)
 {
 	if(TIM_GetITStatus(KEY_TIM,TIM_IT_Update)==SET)
