@@ -19,6 +19,7 @@ enum
 };
 
 static uint8_t lcd_state = 0;
+static uint8_t lcd_real_state = 0;
 
 static void key_null(void);
 static void key1_short(void);
@@ -32,6 +33,8 @@ static void key_default(void);
 void task_key_init(void)
 {
 	hal_key_init();
+	lcd_state = KEY_NULL;
+	lcd_real_state = KEY_NULL;
 }
 
 void task_key_scan(void)
@@ -59,9 +62,20 @@ static void key1_short(void)
 {
 	if(lcd_state==LCD_DISPLAY_ASTRONAUT)
 	{
-		lcd_set_display_state(LCD_DISPLAY_MENU);
-		hal_set_key_press(KEY_NULL);
+		if(lcd_real_state==LCD_DISPLAY_INIT)
+		{
+			lcd_set_display_state(LCD_DISPLAY_MENU);
+			lcd_real_state=LCD_DISPLAY_MENU;
+		}			
+		else if(lcd_real_state==LCD_DISPLAY_MENU)
+		{
+			lcd_set_display_state(LCD_DISPLAY_INIT);
+			lcd_real_state=LCD_DISPLAY_INIT;
+		}
 	}
+	
+	hal_set_key_press(KEY_NULL);
+	
 }
 
 static void key1_long(void)

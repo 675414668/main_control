@@ -11,6 +11,7 @@ enum
 typedef struct 
 {
 	uint8_t state;
+	uint8_t aus;
 }lcd_display_t;
 lcd_display_t lcd_display;
 
@@ -53,7 +54,7 @@ static void lcd_show_init(void)
 	hal_lcd_show_string(30,16,(uint8_t *)"system clock set over",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,32,(uint8_t *)"cpu frequency:80M HZ",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,48,(uint8_t *)"usart set over",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,64,(uint8_t *)"usaer 1baudrate:115200",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,64,(uint8_t *)"usaer1 baudrate:115200",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,80,(uint8_t *)"led set over",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,96,(uint8_t *)"keyboard set over",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,112,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,16,0);
