@@ -168,16 +168,16 @@ void bsp_lcd_init(void)
 	bsp_lcd_gpio_init();//初始化GPIO
 	
 	LCD_RES_RESET();//复位
-	bsp_delay_ms(100);
+//	bsp_delay_ms(100);
 	LCD_RES_SET();
-	bsp_delay_ms(100);
+//	bsp_delay_ms(100);
 	
 	LCD_BLK_SET();//打开背光
-  bsp_delay_ms(100);
+//  bsp_delay_ms(100);
 	
 	//************* Start Initial Sequence **********//
 	bsp_lcd_write_reg(0x11); //Sleep out 
-	bsp_delay_ms(120);              //Delay 120ms 
+//	bsp_delay_ms(120);              //Delay 120ms 
 	//************* Start Initial Sequence **********// 
 	bsp_lcd_write_reg(0x36);
 	if(USE_HORIZONTAL==0)bsp_lcd_write_8bit(0x00);
