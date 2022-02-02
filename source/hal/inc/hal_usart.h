@@ -3,7 +3,7 @@
 
 #include "usart.h"
 
-void hal_usart_init(void);
+void hal_usart_init(uint32_t boadrate);
 #endif 
 
 

@@ -1,12 +1,12 @@
 #include "usart.h"
 
 static void bsp_usart1_gpio_init(void);
-static void bsp_usart1_driver_init(void);
+static void bsp_usart1_driver_init(uint32_t boadrate);
 
-void bsp_usart_com_init(void)
+void bsp_usart_com_init(uint32_t boadrate)
 {
   bsp_usart1_gpio_init();
-	bsp_usart1_driver_init();
+	bsp_usart1_driver_init(boadrate);
 }
 
 static void bsp_usart1_gpio_init(void)
@@ -27,13 +27,13 @@ static void bsp_usart1_gpio_init(void)
 	GPIO_Init(USART_COM_PORT, &GPIO_InitStructure);
 }
 
-static void bsp_usart1_driver_init(void)
+static void bsp_usart1_driver_init(uint32_t boadrate)
 {
 	USART_InitTypeDef USART_InitStructure;
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 	
-	USART_InitStructure.USART_BaudRate = USART_COM_BAUDRATE;
+	USART_InitStructure.USART_BaudRate = boadrate;
   USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   USART_InitStructure.USART_StopBits = USART_StopBits_1;
   USART_InitStructure.USART_Parity = USART_Parity_No;

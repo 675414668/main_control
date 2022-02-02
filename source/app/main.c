@@ -6,7 +6,7 @@
 int main(void)
 {
 	hal_sys_clk_init();
-	hal_usart_init();
+	hal_usart_init(115200);
 	hal_delay_init();
 	task_led_init();
 	hal_key_init();

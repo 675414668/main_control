@@ -11,7 +11,6 @@
 #define USART_COM_RX_SOURCE    GPIO_PinSource10
 #define USART_COM_TX_PIN       GPIO_Pin_9
 #define USART_COM_RX_PIN       GPIO_Pin_10
-#define USART_COM_BAUDRATE     (115200U)
 
-void bsp_usart_com_init(void);
+void bsp_usart_com_init(uint32_t boadrate);
 #endif 
