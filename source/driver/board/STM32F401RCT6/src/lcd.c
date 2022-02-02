@@ -1,5 +1,18 @@
 #include "lcd.h"
 
+uint8_t lcd_timecount=0;
+
+static void bsp_lcd_gpio_init(void);
+static void bsp_lcd_driver_init(void);
+static void bsp_lcd_tim_init(void);
+
+void bsp_lcd_init(void)
+{
+	bsp_lcd_gpio_init();//初始化GPIO
+	bsp_lcd_driver_init();
+	bsp_lcd_tim_init();
+}
+
 void bsp_lcd_gpio_init(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -30,6 +43,7 @@ void bsp_lcd_gpio_init(void)
 
 }
 
+
 void bsp_lcd_spi_init(void)
 {
 	SPI_InitTypeDef SPI_InitStructure;
@@ -50,6 +64,93 @@ void bsp_lcd_spi_init(void)
 	SPI_Cmd(LCD_SPI, ENABLE);//使能SPI
 }
 
+static void bsp_lcd_driver_init(void)
+{
+		LCD_RES_RESET();//复位
+//	bsp_delay_ms(100);
+	LCD_RES_SET();
+//	bsp_delay_ms(100);
+	
+	LCD_BLK_SET();//打开背光
+//  bsp_delay_ms(100);
+	
+	//************* Start Initial Sequence **********//
+	bsp_lcd_write_reg(0x11); //Sleep out 
+//	bsp_delay_ms(120);              //Delay 120ms 
+	//************* Start Initial Sequence **********// 
+	bsp_lcd_write_reg(0x36);
+	if(USE_HORIZONTAL==0)bsp_lcd_write_8bit(0x00);
+	else if(USE_HORIZONTAL==1)bsp_lcd_write_8bit(0xC0);
+	else if(USE_HORIZONTAL==2)bsp_lcd_write_8bit(0x70);
+	else bsp_lcd_write_8bit(0xA0);
+
+	bsp_lcd_write_reg(0x3A);			
+	bsp_lcd_write_8bit(0x05);
+
+	bsp_lcd_write_reg(0xB2);			
+	bsp_lcd_write_8bit(0x0C);
+	bsp_lcd_write_8bit(0x0C); 
+	bsp_lcd_write_8bit(0x00); 
+	bsp_lcd_write_8bit(0x33); 
+	bsp_lcd_write_8bit(0x33); 			
+
+	bsp_lcd_write_reg(0xB7);			
+	bsp_lcd_write_8bit(0x35);
+
+	bsp_lcd_write_reg(0xBB);			
+	bsp_lcd_write_8bit(0x32); //Vcom=1.35V
+					
+	bsp_lcd_write_reg(0xC2);
+	bsp_lcd_write_8bit(0x01);
+
+	bsp_lcd_write_reg(0xC3);			
+	bsp_lcd_write_8bit(0x15); //GVDD=4.8V  颜色深度
+				
+	bsp_lcd_write_reg(0xC4);			
+	bsp_lcd_write_8bit(0x20); //VDV, 0x20:0v
+
+	bsp_lcd_write_reg(0xC6);			
+	bsp_lcd_write_8bit(0x0F); //0x0F:60Hz        	
+
+	bsp_lcd_write_reg(0xD0);			
+	bsp_lcd_write_8bit(0xA4);
+	bsp_lcd_write_8bit(0xA1); 
+
+	bsp_lcd_write_reg(0xE0);
+	bsp_lcd_write_8bit(0xD0);   
+	bsp_lcd_write_8bit(0x08);   
+	bsp_lcd_write_8bit(0x0E);   
+	bsp_lcd_write_8bit(0x09);   
+	bsp_lcd_write_8bit(0x09);   
+	bsp_lcd_write_8bit(0x05);   
+	bsp_lcd_write_8bit(0x31);   
+	bsp_lcd_write_8bit(0x33);   
+	bsp_lcd_write_8bit(0x48);   
+	bsp_lcd_write_8bit(0x17);   
+	bsp_lcd_write_8bit(0x14);   
+	bsp_lcd_write_8bit(0x15);   
+	bsp_lcd_write_8bit(0x31);   
+	bsp_lcd_write_8bit(0x34);   
+
+	bsp_lcd_write_reg(0xE1);     
+	bsp_lcd_write_8bit(0xD0);   
+	bsp_lcd_write_8bit(0x08);   
+	bsp_lcd_write_8bit(0x0E);   
+	bsp_lcd_write_8bit(0x09);   
+	bsp_lcd_write_8bit(0x09);   
+	bsp_lcd_write_8bit(0x15);   
+	bsp_lcd_write_8bit(0x31);   
+	bsp_lcd_write_8bit(0x33);   
+	bsp_lcd_write_8bit(0x48);   
+	bsp_lcd_write_8bit(0x17);   
+	bsp_lcd_write_8bit(0x14);   
+	bsp_lcd_write_8bit(0x15);   
+	bsp_lcd_write_8bit(0x31);   
+	bsp_lcd_write_8bit(0x34);
+	bsp_lcd_write_reg(0x21); 
+
+	bsp_lcd_write_reg(0x29);
+}
 
 /******************************************************************************
       函数说明：LCD串行数据写入函数
@@ -161,99 +262,41 @@ void bsp_lcd_set_addr(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 		bsp_lcd_write_16bit(y2);
 		bsp_lcd_write_reg(0x2c);//储存器写
 	}
-}
-
-void bsp_lcd_init(void)
-{
-	bsp_lcd_gpio_init();//初始化GPIO
-	
-	LCD_RES_RESET();//复位
-//	bsp_delay_ms(100);
-	LCD_RES_SET();
-//	bsp_delay_ms(100);
-	
-	LCD_BLK_SET();//打开背光
-//  bsp_delay_ms(100);
-	
-	//************* Start Initial Sequence **********//
-	bsp_lcd_write_reg(0x11); //Sleep out 
-//	bsp_delay_ms(120);              //Delay 120ms 
-	//************* Start Initial Sequence **********// 
-	bsp_lcd_write_reg(0x36);
-	if(USE_HORIZONTAL==0)bsp_lcd_write_8bit(0x00);
-	else if(USE_HORIZONTAL==1)bsp_lcd_write_8bit(0xC0);
-	else if(USE_HORIZONTAL==2)bsp_lcd_write_8bit(0x70);
-	else bsp_lcd_write_8bit(0xA0);
-
-	bsp_lcd_write_reg(0x3A);			
-	bsp_lcd_write_8bit(0x05);
-
-	bsp_lcd_write_reg(0xB2);			
-	bsp_lcd_write_8bit(0x0C);
-	bsp_lcd_write_8bit(0x0C); 
-	bsp_lcd_write_8bit(0x00); 
-	bsp_lcd_write_8bit(0x33); 
-	bsp_lcd_write_8bit(0x33); 			
-
-	bsp_lcd_write_reg(0xB7);			
-	bsp_lcd_write_8bit(0x35);
-
-	bsp_lcd_write_reg(0xBB);			
-	bsp_lcd_write_8bit(0x32); //Vcom=1.35V
-					
-	bsp_lcd_write_reg(0xC2);
-	bsp_lcd_write_8bit(0x01);
-
-	bsp_lcd_write_reg(0xC3);			
-	bsp_lcd_write_8bit(0x15); //GVDD=4.8V  颜色深度
-				
-	bsp_lcd_write_reg(0xC4);			
-	bsp_lcd_write_8bit(0x20); //VDV, 0x20:0v
-
-	bsp_lcd_write_reg(0xC6);			
-	bsp_lcd_write_8bit(0x0F); //0x0F:60Hz        	
-
-	bsp_lcd_write_reg(0xD0);			
-	bsp_lcd_write_8bit(0xA4);
-	bsp_lcd_write_8bit(0xA1); 
-
-	bsp_lcd_write_reg(0xE0);
-	bsp_lcd_write_8bit(0xD0);   
-	bsp_lcd_write_8bit(0x08);   
-	bsp_lcd_write_8bit(0x0E);   
-	bsp_lcd_write_8bit(0x09);   
-	bsp_lcd_write_8bit(0x09);   
-	bsp_lcd_write_8bit(0x05);   
-	bsp_lcd_write_8bit(0x31);   
-	bsp_lcd_write_8bit(0x33);   
-	bsp_lcd_write_8bit(0x48);   
-	bsp_lcd_write_8bit(0x17);   
-	bsp_lcd_write_8bit(0x14);   
-	bsp_lcd_write_8bit(0x15);   
-	bsp_lcd_write_8bit(0x31);   
-	bsp_lcd_write_8bit(0x34);   
-
-	bsp_lcd_write_reg(0xE1);     
-	bsp_lcd_write_8bit(0xD0);   
-	bsp_lcd_write_8bit(0x08);   
-	bsp_lcd_write_8bit(0x0E);   
-	bsp_lcd_write_8bit(0x09);   
-	bsp_lcd_write_8bit(0x09);   
-	bsp_lcd_write_8bit(0x15);   
-	bsp_lcd_write_8bit(0x31);   
-	bsp_lcd_write_8bit(0x33);   
-	bsp_lcd_write_8bit(0x48);   
-	bsp_lcd_write_8bit(0x17);   
-	bsp_lcd_write_8bit(0x14);   
-	bsp_lcd_write_8bit(0x15);   
-	bsp_lcd_write_8bit(0x31);   
-	bsp_lcd_write_8bit(0x34);
-	bsp_lcd_write_reg(0x21); 
-
-	bsp_lcd_write_reg(0x29);
 } 
 
+static void bsp_lcd_tim_init(void)
+{
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitTypeStruct;
+	NVIC_InitTypeDef NVIC_InitTypeStruct;
+	
+	RCC_APB1PeriphClockCmd(LCD_TIM_RCC,ENABLE);
+	
+	TIM_TimeBaseInitTypeStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseInitTypeStruct.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInitTypeStruct.TIM_Period = LCD_TIM_PERIOD;
+	TIM_TimeBaseInitTypeStruct.TIM_Prescaler = LCD_TIM_PRESCALER;
+	TIM_TimeBaseInit(LCD_TIM,&TIM_TimeBaseInitTypeStruct);
+	
+	TIM_ITConfig(LCD_TIM,TIM_IT_Update,ENABLE);
+	
+	NVIC_InitTypeStruct.NVIC_IRQChannel = LCD_TIM_IRQN;
+	NVIC_InitTypeStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitTypeStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitTypeStruct.NVIC_IRQChannelSubPriority = 2;
+	NVIC_Init(&NVIC_InitTypeStruct);
+	
+	TIM_Cmd(LCD_TIM,ENABLE);
+}	
 
+
+void LCD_TIM_IRQHANDLER(void)
+{
+	if(TIM_GetITStatus(LCD_TIM,TIM_IT_Update)==SET)
+	{
+		lcd_timecount++;
+		TIM_ClearITPendingBit(LCD_TIM,TIM_IT_Update);
+	}
+}
 
 
 
