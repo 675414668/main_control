@@ -3,15 +3,17 @@
 
 typedef  struct 
 {
-	uint8_t key1;
-	uint8_t key2;
-	uint8_t key3;
-}key_count_t;
-key_count_t key_count;
+	uint8_t key1_count;
+	uint8_t key2_count;
+	uint8_t key3_count;
+	uint8_t press;
+}key_crl_t;
+key_crl_t key_crl;
 
 enum 
 {
-	KEY1_S=0,
+	KEY_NULL=0,
+	KEY1_S,
 	KEY1_L,
 	KEY2_S,
 	KEY2_L,
@@ -19,7 +21,7 @@ enum
 	KEY3_L,
 };
 
-uint8_t key_press = 0;
+
 
 static void bsp_key_gpio_init(void);
 static void bsp_key_tim_init(void);
@@ -73,39 +75,39 @@ static void bsp_key_scan(void)
 {
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY1_PIN)==0)
 	{
-		key_count.key1++;
-		if(key_count.key1==50)       key_press = KEY1_S;
-		else if(key_count.key1==200) key_press = KEY1_L;
+		key_crl.key1_count++;
+		if(key_crl.key1_count==50)       key_crl.press = KEY1_S;
+		else if(key_crl.key1_count==200) key_crl.press = KEY1_L;
 	}
 	else
 	{
-		key_count.key1=0;
+		key_crl.key1_count=0;
 	}
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY2_PIN)==0)
 	{
-		key_count.key2++;
-		if(key_count.key2==50)       key_press = KEY2_S;
-		else if(key_count.key2==200) key_press = KEY2_L;
+		key_crl.key2_count++;
+		if(key_crl.key2_count==50)       key_crl.press = KEY2_S;
+		else if(key_crl.key2_count==200) key_crl.press = KEY2_L;
 	}
 	else
 	{
-		key_count.key2=0;
+		key_crl.key2_count=0;
 	}
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY3_PIN)==0)
 	{
-		key_count.key3++;
-	  if(key_count.key3==50)       key_press = KEY3_S;
-		else if(key_count.key3==200) key_press = KEY3_L;
+		key_crl.key3_count++;
+	  if(key_crl.key3_count==50)       key_crl.press = KEY3_S;
+		else if(key_crl.key3_count==200) key_crl.press = KEY3_L;
 	}
 	else
 	{
-		key_count.key3=0;
+		key_crl.key3_count=0;
 	}
 }
 
 uint8_t bsp_get_key_press(void)
 {
-	return key_press;
+	return key_crl.press;
 }
 void KEY_TIM_IRQHANDLER(void)
 {
