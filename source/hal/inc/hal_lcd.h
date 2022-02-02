@@ -27,6 +27,7 @@
 #define LGRAYBLUE        0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
+void hal_lcd_init(void);
 void hal_lcd_fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color);//指定区域填充颜色
 void hal_lcd_draw_fill(uint16_t color);
 void hal_lcd_clear(uint16_t x,uint16_t y,uint16_t color);

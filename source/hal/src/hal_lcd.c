@@ -1,6 +1,11 @@
 #include "hal_lcd.h"
 #include "lcdfont.h"
 
+void hal_lcd_init(void)
+{
+	bsp_lcd_init();
+}
+
 /******************************************************************************
       函数说明：在指定区域填充颜色
       入口数据：xsta,ysta   起始坐标
