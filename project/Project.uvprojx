@@ -510,11 +510,6 @@
               <FileType>1</FileType>
               <FilePath>..\source\app\task_lcd.c</FilePath>
             </File>
-            <File>
-              <FileName>task_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\app\task_key.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -524,11 +519,6 @@
               <FileName>hal_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>hal_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\hal\src\hal_key.c</FilePath>
             </File>
             <File>
               <FileName>hal_lcd.c</FileName>
@@ -554,6 +544,11 @@
               <FileName>hal_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_lcd_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\hal\src\hal_lcd_api.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1080,11 +1075,6 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\driver\board\STM32F401RCT6\src\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\driver\board\STM32F401RCT6\src\key.c</FilePath>
             </File>
             <File>
               <FileName>lcd.c</FileName>
@@ -3676,11 +3666,6 @@
               <FileType>1</FileType>
               <FilePath>..\source\app\task_lcd.c</FilePath>
             </File>
-            <File>
-              <FileName>task_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\app\task_key.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -3690,11 +3675,6 @@
               <FileName>hal_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>hal_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\hal\src\hal_key.c</FilePath>
             </File>
             <File>
               <FileName>hal_lcd.c</FileName>
@@ -3720,6 +3700,11 @@
               <FileName>hal_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_lcd_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\hal\src\hal_lcd_api.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4246,11 +4231,6 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\driver\board\STM32F401RCT6\src\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\driver\board\STM32F401RCT6\src\key.c</FilePath>
             </File>
             <File>
               <FileName>lcd.c</FileName>
@@ -6431,11 +6411,6 @@
               <FileType>1</FileType>
               <FilePath>..\source\app\task_lcd.c</FilePath>
             </File>
-            <File>
-              <FileName>task_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\app\task_key.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -6445,11 +6420,6 @@
               <FileName>hal_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>hal_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\hal\src\hal_key.c</FilePath>
             </File>
             <File>
               <FileName>hal_lcd.c</FileName>
@@ -6475,6 +6445,11 @@
               <FileName>hal_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_lcd_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\hal\src\hal_lcd_api.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6605,11 +6580,6 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\driver\board\STM32F401RCT6\src\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\driver\board\STM32F401RCT6\src\key.c</FilePath>
             </File>
             <File>
               <FileName>lcd.c</FileName>

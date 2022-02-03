@@ -2,7 +2,6 @@
 #include "version.h"
 #include "task_lcd.h"
 #include "task_led.h"
-#include "task_key.h"
 
 int main(void)
 {
@@ -10,7 +9,6 @@ int main(void)
 	hal_delay_init();
 	hal_usart_init(115200);
 	task_led_init();
-	task_key_init();
   task_lcd_init();
 	
 	printf("system begin\r\n");
