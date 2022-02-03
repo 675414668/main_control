@@ -8,7 +8,7 @@ void hal_key_init(void);
 uint8_t hal_get_key_press(void);
 void hal_set_key_press(uint8_t state);
 uint8_t hal_lcd_get_astronaut_image_num(void);
-
+uint8_t hal_lcd_get_waiting_point(void);
 #endif
 
 

@@ -29,8 +29,10 @@ lcd_display_t lcd_display;
 
 static void lcd_data_init(void);
 static void lcd_show_init(void);
+static void lcd_waiting_point(void);
 static void lcd_show_astronaut(void);
 static void lcd_show_menu(void);
+
 
 static void key_null(void);
 static void key1_short(void);
@@ -96,6 +98,18 @@ static void lcd_show_init(void)
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
 
+static void lcd_waiting_point(void)
+{
+	uint8_t point_num_flag=0;
+	point_num_flag=hal_lcd_get_waiting_point();
+	if(lcd_display.real_state==LCD_DISPLAY_INIT)
+	{
+		if(point_num_flag==1)      hal_lcd_show_string(145,180,(uint8_t *)".  ",BRRED,BLACK,32,0);
+		else if(point_num_flag==2) hal_lcd_show_string(145,180,(uint8_t *)".. ",BRRED,BLACK,32,0);
+		else if(point_num_flag==3) hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0);
+	}
+}
+
 static void lcd_show_astronaut(void)
 {
 	lcd_display.astronaut_num=hal_lcd_get_astronaut_image_num();
@@ -117,6 +131,7 @@ static void lcd_show_astronaut(void)
 		case 14:{hal_lcd_show_picture(235,200,45,38,gImage_13); break;}
 		default:{break;}
 	}
+	lcd_waiting_point();
 	lcd_display.astronaut_num=0;
 }
 
@@ -126,8 +141,6 @@ static void lcd_show_menu(void)
 	hal_lcd_fill(0,180,230,240,BLACK);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
-
-
 
 static void key_null(void)
 {

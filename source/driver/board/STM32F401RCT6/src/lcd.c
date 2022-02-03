@@ -22,8 +22,10 @@ key_crl_t key_crl;
 
 typedef struct 
 {
-	uint16_t lcd_timecount;
+	uint16_t gif_timecount;
 	uint8_t astronaut_image_num;
+	uint16_t waiting_count;
+	uint8_t waiting_point;
 }lcd_tim_ctrl_t;
 lcd_tim_ctrl_t lcd_tim_ctrl;
 
@@ -33,7 +35,7 @@ static void bsp_key_gpio_init(void);
 static void bsp_key_tim_init(void);
 static void bsp_key_scan(void);
 static void lcd_astronaut_image_change(void);
-
+static void lcd_waiting_point_change(void);
 
 void bsp_lcd_init(void)
 {
@@ -46,7 +48,8 @@ void bsp_key_init(void)
 	bsp_key_gpio_init();
 	bsp_key_tim_init();
 	lcd_tim_ctrl.astronaut_image_num=0;
-	lcd_tim_ctrl.lcd_timecount=0;
+	lcd_tim_ctrl.gif_timecount=0;
+	lcd_tim_ctrl.waiting_point=0;
 }
 
 void bsp_lcd_gpio_init(void)
@@ -384,19 +387,19 @@ void bsp_set_key_press(uint8_t state)
 
 static void lcd_astronaut_image_change(void)
 {
-	if(lcd_tim_ctrl.lcd_timecount==ASTRONAUT_IMAGE_TIM)
+	if(lcd_tim_ctrl.gif_timecount==ASTRONAUT_IMAGE_TIM)
 	{
-		lcd_tim_ctrl.lcd_timecount=0;
+		lcd_tim_ctrl.gif_timecount=0;
 	}
 	else
 	{
-		lcd_tim_ctrl.lcd_timecount++;
+		lcd_tim_ctrl.gif_timecount++;
 	}
-	if((lcd_tim_ctrl.lcd_timecount%ASTRONAUT_IMAGE_SPEED)==0)
+	if((lcd_tim_ctrl.gif_timecount%ASTRONAUT_IMAGE_SPEED)==0)
 	{
 		if(lcd_tim_ctrl.astronaut_image_num==ASTRONAUT_IMAGE_NUM)
 		{
-			lcd_tim_ctrl.astronaut_image_num=0;
+			lcd_tim_ctrl.astronaut_image_num=1;
 		}
 		else
 		{
@@ -404,9 +407,35 @@ static void lcd_astronaut_image_change(void)
 		}
 	}
 }
+static void lcd_waiting_point_change(void)
+{
+	if(lcd_tim_ctrl.waiting_count==WAITING_POINT_TIM)
+	{
+		lcd_tim_ctrl.waiting_count=0;
+	}
+	else
+	{
+		lcd_tim_ctrl.waiting_count++;
+	}
+	if((lcd_tim_ctrl.waiting_count%WAITING_POINT_SPEED)==0)
+	{
+		if(lcd_tim_ctrl.waiting_point==WAITING_POINT_NUM)
+		{
+			lcd_tim_ctrl.waiting_point=1;
+		}
+		else
+		{
+			lcd_tim_ctrl.waiting_point++;
+		}
+	}
+}
 uint8_t bsp_lcd_get_astronaut_image_num(void)
 {
 	return lcd_tim_ctrl.astronaut_image_num;
+}
+uint8_t bsp_lcd_get_waiting_point(void)
+{
+	return lcd_tim_ctrl.waiting_point;
 }
 void KEY_TIM_IRQHANDLER(void)
 {
@@ -414,10 +443,9 @@ void KEY_TIM_IRQHANDLER(void)
 	{
 		bsp_key_scan();
 		lcd_astronaut_image_change();
+		lcd_waiting_point_change();
 		TIM_ClearITPendingBit(KEY_TIM,TIM_IT_Update);
 	}
-	
-	
 }
 
 
