@@ -113,7 +113,6 @@ static void lcd_waiting_point(void)
 			case 4:{hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
 			default:{break;}
 		}
-		printf("lcd_display.point_num:%d\r\n",lcd_display.point_num);
 		lcd_display.point_num=0;
 	}
 }
@@ -177,27 +176,27 @@ static void key1_short(void)
 
 static void key1_long(void)
 {
-	
+
 }
 
 static void key2_short(void)
 {
-	
+
 }
 
 static void key2_long(void)
 {
-	
+
 }
 
 static void key3_short(void)
 {
-	
+
 }
 
 static void key3_long(void)
 {
-	
+
 }
 
 static void key_default(void)
