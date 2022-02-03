@@ -1,4 +1,5 @@
 #include "task_lcd.h"
+#include "hal_usart.h"
 #include "pic.h"
 
 enum 
@@ -24,6 +25,7 @@ typedef struct
 	uint8_t state;
 	uint8_t real_state;
 	uint8_t astronaut_num;
+	uint8_t point_num;
 }lcd_display_t;
 lcd_display_t lcd_display;
 
@@ -100,13 +102,19 @@ static void lcd_show_init(void)
 
 static void lcd_waiting_point(void)
 {
-	uint8_t point_num_flag=0;
-	point_num_flag=hal_lcd_get_waiting_point();
+	lcd_display.point_num=hal_lcd_get_waiting_point();
 	if(lcd_display.real_state==LCD_DISPLAY_INIT)
 	{
-		if(point_num_flag==1)      hal_lcd_show_string(145,180,(uint8_t *)".  ",BRRED,BLACK,32,0);
-		else if(point_num_flag==2) hal_lcd_show_string(145,180,(uint8_t *)".. ",BRRED,BLACK,32,0);
-		else if(point_num_flag==3) hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0);
+		switch (lcd_display.point_num)
+		{
+			case 1:{hal_lcd_show_string(145,180,(uint8_t *)"   ",BRRED,BLACK,32,0); break;}
+			case 2:{hal_lcd_show_string(145,180,(uint8_t *)".  ",BRRED,BLACK,32,0); break;}
+			case 3:{hal_lcd_show_string(145,180,(uint8_t *)".. ",BRRED,BLACK,32,0); break;}
+			case 4:{hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
+			default:{break;}
+		}
+		printf("lcd_display.point_num:%d\r\n",lcd_display.point_num);
+		lcd_display.point_num=0;
 	}
 }
 

@@ -47,9 +47,9 @@ void bsp_key_init(void)
 {
 	bsp_key_gpio_init();
 	bsp_key_tim_init();
-	lcd_tim_ctrl.astronaut_image_num=0;
+	lcd_tim_ctrl.astronaut_image_num=1;
 	lcd_tim_ctrl.gif_timecount=0;
-	lcd_tim_ctrl.waiting_point=0;
+	lcd_tim_ctrl.waiting_point=1;
 }
 
 void bsp_lcd_gpio_init(void)
@@ -389,7 +389,7 @@ static void lcd_astronaut_image_change(void)
 {
 	if(lcd_tim_ctrl.gif_timecount==ASTRONAUT_IMAGE_TIM)
 	{
-		lcd_tim_ctrl.gif_timecount=0;
+		lcd_tim_ctrl.gif_timecount=1;
 	}
 	else
 	{
@@ -411,7 +411,7 @@ static void lcd_waiting_point_change(void)
 {
 	if(lcd_tim_ctrl.waiting_count==WAITING_POINT_TIM)
 	{
-		lcd_tim_ctrl.waiting_count=0;
+		lcd_tim_ctrl.waiting_count=1;
 	}
 	else
 	{
