@@ -61,20 +61,14 @@
 #define LCD_CS2_RESET()   GPIO_ResetBits(LCD_CONTROL_PORT,LCD_CONTROL_CS2)//CS2 字库片选
 #define LCD_CS2_SET()     GPIO_SetBits(LCD_CONTROL_PORT,LCD_CONTROL_CS2)	
 
-#define LCD_TIM                TIM2
-#define LCD_TIM_RCC            RCC_APB1Periph_TIM2
-#define LCD_TIM_PERIOD         (10000)
-#define LCD_TIM_PRESCALER      (84-1)
-#define LCD_TIM_IRQN           TIM2_IRQn
-#define LCD_TIM_IRQHANDLER     TIM2_IRQHandler
-
+void bsp_lcd_init(void);
 void bsp_lcd_gpio_init(void);//初始化GPIO
 void bsp_lcd_write_bus(uint8_t dat);//模拟SPI时序
 void bsp_lcd_write_8bit(uint8_t dat);//写入一个字节
 void bsp_lcd_write_16bit(uint16_t dat);//写入两个字节
 void bsp_lcd_write_reg(uint8_t dat);//写入一个指令
 void bsp_lcd_set_addr(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2);//设置坐标函数
-void bsp_lcd_init(void);//LCD初始化
+
 
 #endif 
 

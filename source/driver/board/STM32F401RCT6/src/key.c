@@ -3,12 +3,20 @@
 
 typedef  struct 
 {
-	uint8_t key1_count;
-	uint8_t key2_count;
-	uint8_t key3_count;
-	uint8_t press;
+	uint16_t key1_count;
+	uint16_t key2_count;
+	uint16_t key3_count;
+	uint16_t press;
 }key_crl_t;
 key_crl_t key_crl;
+
+typedef struct 
+{
+	uint16_t lcd_timecount;
+	uint8_t astronaut_image_num;
+}lcd_tim_ctrl_t;
+
+lcd_tim_ctrl_t lcd_tim_ctrl;
 
 enum 
 {
@@ -26,11 +34,14 @@ enum
 static void bsp_key_gpio_init(void);
 static void bsp_key_tim_init(void);
 static void bsp_key_scan(void);
+static void lcd_astronaut_image_change(void);
 
 void bsp_key_init(void)
 {
 	bsp_key_gpio_init();
 	bsp_key_tim_init();
+	lcd_tim_ctrl.astronaut_image_num=0;
+	lcd_tim_ctrl.lcd_timecount=0;
 }
 
 static void bsp_key_gpio_init(void)
@@ -114,12 +125,39 @@ void bsp_set_key_press(uint8_t state)
 {
 	key_crl.press=state;
 }
-	
+
+static void lcd_astronaut_image_change(void)
+{
+	if(lcd_tim_ctrl.lcd_timecount==ASTRONAUT_IMAGE_TIM)
+	{
+		lcd_tim_ctrl.lcd_timecount=0;
+	}
+	else
+	{
+		lcd_tim_ctrl.lcd_timecount++;
+	}
+	if((lcd_tim_ctrl.lcd_timecount%ASTRONAUT_IMAGE_SPEED)==0)
+	{
+		if(lcd_tim_ctrl.astronaut_image_num==ASTRONAUT_IMAGE_NUM)
+		{
+			lcd_tim_ctrl.astronaut_image_num=0;
+		}
+		else
+		{
+			lcd_tim_ctrl.astronaut_image_num++;
+		}
+	}
+}
+uint8_t bsp_lcd_get_astronaut_image_num(void)
+{
+	return lcd_tim_ctrl.astronaut_image_num;
+}
 void KEY_TIM_IRQHANDLER(void)
 {
 	if(TIM_GetITStatus(KEY_TIM,TIM_IT_Update)==SET)
 	{
 		bsp_key_scan();
+		lcd_astronaut_image_change();
 		TIM_ClearITPendingBit(KEY_TIM,TIM_IT_Update);
 	}
 	

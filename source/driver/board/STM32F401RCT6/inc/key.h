@@ -12,17 +12,20 @@
 
 #define KEY_TIM                TIM3
 #define KEY_TIM_RCC            RCC_APB1Periph_TIM3
-#define KEY_TIM_PERIOD         (10000)
-#define KEY_TIM_PRESCALER      (84-1)
+#define KEY_TIM_PERIOD         (1000)
+#define KEY_TIM_PRESCALER      (84-1)//TIM_OUT = KEY_TIM_PERIOD*(KEY_TIM_PRESCALER+1)/84 =1MS
 #define KEY_TIM_IRQN           TIM3_IRQn
 #define KEY_TIM_IRQHANDLER     TIM3_IRQHandler
 
-#define KEY_S_TIM  (10)
-#define KEY_L_TIM  (200)
+#define KEY_S_TIM  (50)
+#define KEY_L_TIM  (2000)
 
-//TIM_OUT = KEY_TIM_PERIOD*(KEY_TIM_PRESCALER+1)/84 =10MS
+#define ASTRONAUT_IMAGE_NUM    (14)
+#define ASTRONAUT_IMAGE_SPEED  (20)
+#define ASTRONAUT_IMAGE_TIM    (ASTRONAUT_IMAGE_NUM*ASTRONAUT_IMAGE_SPEED)
 
 void bsp_key_init(void);
 uint8_t bsp_get_key_press(void);
 void bsp_set_key_press(uint8_t state);
+uint8_t bsp_lcd_get_astronaut_image_num(void);
 #endif 

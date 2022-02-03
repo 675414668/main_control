@@ -14,3 +14,8 @@ void hal_set_key_press(uint8_t state)
 {
 	bsp_set_key_press(state);
 }
+
+uint8_t hal_lcd_get_astronaut_image_num(void)
+{
+	return  bsp_lcd_get_astronaut_image_num();
+}
