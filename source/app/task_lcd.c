@@ -19,6 +19,7 @@ enum
 	LCD_DISPLAY_ASTRONAUT,
 	LCD_DISPLAY_MENU,
 	LCD_DISPLAY_LASER_CTRL,
+	LCD_DISPLAY_LASER_CTRL_SET,
 };
 
 typedef struct 
@@ -27,6 +28,7 @@ typedef struct
 	uint8_t real_state;
 	uint8_t astronaut_num;
 	uint8_t point_num;
+	uint8_t laser_set;//1 mode 2 state
 }lcd_display_t;
 lcd_display_t lcd_display;
 
@@ -36,6 +38,13 @@ typedef  struct
 }key_ctrl_t;
 key_ctrl_t key_ctrl;
 
+typedef  struct
+{
+	uint8_t mode_value;
+	uint8_t state_value;
+}laser_ctrl_t;
+laser_ctrl_t laser_ctrl;
+
 static void lcd_data_init(void);
 static void lcd_show_init(void);
 //static void lcd_waiting_point(void);
@@ -44,6 +53,7 @@ static void lcd_show_astronaut(void);
 static void lcd_show_menu(void);
 static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num);
 static void lcd_show_laser_control(void);
+static void lcd_show_laser_control_set(void);
 
 static void key_null(void);
 static void key1_short(void);
@@ -71,10 +81,11 @@ void task_lcd_display(void)
 {
 	switch(lcd_display.state)
 	{
-		case LCD_DISPLAY_INIT:      { lcd_show_init();          break ;}
-		case LCD_DISPLAY_ASTRONAUT: { lcd_show_astronaut();     break ;}
-		case LCD_DISPLAY_MENU:      { lcd_show_menu();          break ;}
-		case LCD_DISPLAY_LASER_CTRL:{ lcd_show_laser_control();          break ;}
+		case LCD_DISPLAY_INIT:          { lcd_show_init();              break ;}
+		case LCD_DISPLAY_ASTRONAUT:     { lcd_show_astronaut();         break ;}
+		case LCD_DISPLAY_MENU:          { lcd_show_menu();              break ;}
+		case LCD_DISPLAY_LASER_CTRL:    { lcd_show_laser_control();     break ;}
+		case LCD_DISPLAY_LASER_CTRL_SET:{ lcd_show_laser_control_set(); break ;}
 		default: {break;}
 			
 	}
@@ -182,13 +193,71 @@ static void lcd_show_menu(void)
 }
 static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
 {
-	hal_lcd_fill(30,24,46,24+16*MENU_OPTIONS_NUM,BLACK);
-	hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
+	if(lcd_display.real_state==LCD_DISPLAY_MENU)
+	{
+		hal_lcd_fill(x,y,x+16,y+16*MENU_OPTIONS_NUM,BLACK);
+	  hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
+	{
+		hal_lcd_fill(x,y,x+16,y+16*LASER_CTRL_OPTIONS_NUM,BLACK);
+	  hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
+	}
+	if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
+	{
+		if(lcd_display.laser_set==1)
+		{
+			hal_lcd_fill(x,y,x+16,y+16*LASER_CTRL_MODE_SET_NUM,BLACK);
+	    hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
+		}
+		else if(lcd_display.laser_set==2)
+		{
+			hal_lcd_fill(x,y,x+16,y+16*LASER_CTRL_STATE_SET_NUM,BLACK);
+	    hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
+		}
+	}
+
 }
 static void lcd_show_laser_control(void)
 {
 	hal_lcd_show_string(62,0,(uint8_t *)"LASER CONTROL",BRRED,BLACK,24,0);
+	hal_lcd_show_string(50,24,(uint8_t *)"mode:",BRRED,BLACK,16,0);
+	hal_lcd_show_string(50,40,(uint8_t *)"state:",BRRED,BLACK,16,0);
+	if(laser_ctrl.mode_value==0)      hal_lcd_show_string(140,24,(uint8_t *)"single",BRRED,BLACK,16,0);
+	else if(laser_ctrl.mode_value==1) hal_lcd_show_string(140,24,(uint8_t *)"auto  ",BRRED,BLACK,16,0);
+	if(laser_ctrl.state_value==0)      hal_lcd_show_string(140,40,(uint8_t *)"close",BRRED,BLACK,16,0);
+	else if(laser_ctrl.state_value==1) 
+	{
+		hal_lcd_show_string(140,40,(uint8_t *)"open ",BRRED,BLACK,16,0);
+	}
+	lcd_show_cursor(30,24,key_ctrl.up_down);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
+}
+
+static void lcd_show_laser_control_set(void)
+{
+	if(lcd_display.laser_set==1) //set mode
+	{
+		hal_lcd_fill(30,24,30+16,24+16*LASER_CTRL_OPTIONS_NUM,BLACK);//clear last cursor
+		hal_lcd_draw_rectangle(50,60,230,220,BRRED);
+		hal_lcd_draw_line(50,96,230,96,BRRED);
+		hal_lcd_show_string(116,70,(uint8_t *)"mode set",BRRED,BLACK,16,0);
+		hal_lcd_show_string(80,100,(uint8_t *)"single",BRRED,BLACK,16,0);
+		hal_lcd_show_string(80,116,(uint8_t *)"auto",BRRED,BLACK,16,0);
+		lcd_show_cursor(64,100,key_ctrl.up_down);
+		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
+	}
+	else if(lcd_display.laser_set==2) //set state
+	{
+		hal_lcd_fill(30,24,30+16,24+16*LASER_CTRL_OPTIONS_NUM,BLACK);//clear last cursor
+		hal_lcd_draw_rectangle(50,60,230,220,BRRED);
+		hal_lcd_draw_line(50,96,230,96,BRRED);
+		hal_lcd_show_string(112,70,(uint8_t *)"state set",BRRED,BLACK,16,0);
+		hal_lcd_show_string(80,100,(uint8_t *)"close",BRRED,BLACK,16,0);
+		hal_lcd_show_string(80,116,(uint8_t *)"open",BRRED,BLACK,16,0);
+		lcd_show_cursor(64,100,key_ctrl.up_down);
+		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
+	}
 }
 
 static void key_null(void)
@@ -202,6 +271,7 @@ static void key1_short(void)
 	{
 		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_MENU;
+		key_ctrl.up_down=0;
 		hal_lcd_fill(0,0,280,240,BLACK);
 	}
 	else if(lcd_display.real_state==LCD_DISPLAY_MENU)
@@ -209,6 +279,27 @@ static void key1_short(void)
 		if(key_ctrl.up_down<(MENU_OPTIONS_NUM-1)) key_ctrl.up_down++;
 		else key_ctrl.up_down=0;
 		lcd_display.state=LCD_DISPLAY_MENU;
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
+	{
+		if(key_ctrl.up_down<(LASER_CTRL_OPTIONS_NUM-1)) key_ctrl.up_down++;
+		else key_ctrl.up_down=0;
+		lcd_display.state=LCD_DISPLAY_LASER_CTRL;
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
+	{
+		if(lcd_display.laser_set==1)
+		{
+			if(key_ctrl.up_down<(LASER_CTRL_MODE_SET_NUM-1)) key_ctrl.up_down++;
+		  else key_ctrl.up_down=0;
+		  lcd_display.state=LCD_DISPLAY_LASER_CTRL_SET;
+		}
+		else if(lcd_display.laser_set==2)
+		{
+			if(key_ctrl.up_down<(LASER_CTRL_STATE_SET_NUM-1)) key_ctrl.up_down++;
+		  else key_ctrl.up_down=0;
+		  lcd_display.state=LCD_DISPLAY_LASER_CTRL_SET;
+		}
 	}
 
 	hal_set_key_press(KEY_NULL);
@@ -225,6 +316,7 @@ static void key2_short(void)
 	{
 		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_MENU;
+		key_ctrl.up_down=0;
 		hal_lcd_fill(0,0,280,240,BLACK);
 	}
 	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
@@ -233,6 +325,13 @@ static void key2_short(void)
 		lcd_display.real_state=LCD_DISPLAY_MENU;
 		key_ctrl.up_down=0;
 		hal_lcd_fill(0,0,280,240,BLACK);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
+	{
+		lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
+		lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+		key_ctrl.up_down=0;
+		hal_lcd_fill(50,60,231,221,BLACK);
 	}
 	hal_set_key_press(KEY_NULL);
 }
@@ -248,13 +347,43 @@ static void key3_short(void)
 	{
 		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_MENU;
+		key_ctrl.up_down=0;
 		hal_lcd_fill(0,0,280,240,BLACK);
 	}
 	else if(lcd_display.real_state==LCD_DISPLAY_MENU && key_ctrl.up_down==0)
 	{
 		lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+		key_ctrl.up_down=0;
 		hal_lcd_fill(0,0,280,240,BLACK);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
+	{
+		lcd_display.state=LCD_DISPLAY_LASER_CTRL_SET;//will turn to gif
+		lcd_display.real_state=LCD_DISPLAY_LASER_CTRL_SET;
+		lcd_display.laser_set=key_ctrl.up_down+1;
+		key_ctrl.up_down=0;
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
+	{
+		if(lcd_display.laser_set==1)
+		{
+			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+			hal_lcd_fill(50,60,231,221,BLACK);
+			laser_ctrl.mode_value=key_ctrl.up_down;
+			key_ctrl.up_down=0;
+			lcd_display.laser_set=0;
+		}
+		if(lcd_display.laser_set==2)
+		{
+			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+			hal_lcd_fill(50,60,231,221,BLACK);
+			laser_ctrl.state_value=key_ctrl.up_down;
+			key_ctrl.up_down=0;
+			lcd_display.laser_set=0;
+		}
 	}
 	hal_set_key_press(KEY_NULL);
 }

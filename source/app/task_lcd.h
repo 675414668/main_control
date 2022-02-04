@@ -5,7 +5,10 @@
 #include "hal_lcd_api.h"
 #include "hal_lcd_font.h"
 
-#define MENU_OPTIONS_NUM  (6)
+#define MENU_OPTIONS_NUM              (6)
+#define LASER_CTRL_OPTIONS_NUM        (2)
+#define LASER_CTRL_MODE_SET_NUM       (2)
+#define LASER_CTRL_STATE_SET_NUM      (2)
 
 void task_lcd_init(void);
 void task_key_scan(void);
