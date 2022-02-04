@@ -5,6 +5,8 @@
 #include "hal_lcd_api.h"
 #include "hal_lcd_font.h"
 
+#define MENU_OPTIONS_NUM  (6)
+
 void task_lcd_init(void);
 void task_key_scan(void);
 void task_lcd_display(void);

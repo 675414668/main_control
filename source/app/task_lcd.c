@@ -126,7 +126,7 @@ static void lcd_waiting_point(void)
 
 static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
 {
-	hal_lcd_fill(30,24,46,240,BLACK);
+	hal_lcd_fill(30,24,46,24+16*MENU_OPTIONS_NUM,BLACK);
 	hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
 }
 
@@ -159,6 +159,11 @@ static void lcd_show_menu(void)
 {
 	hal_lcd_show_string(116,0,(uint8_t *)"MENU",BRRED,BLACK,24,0);
 	hal_lcd_show_string(50,24,(uint8_t *)"laser control",BRRED,BLACK,16,0);
+	hal_lcd_show_string(50,40,(uint8_t *)"RGB led control",BRRED,BLACK,16,0);
+	hal_lcd_show_string(50,56,(uint8_t *)"stopwatch",BRRED,BLACK,16,0);
+	hal_lcd_show_string(50,72,(uint8_t *)"WiFi connection",BRRED,BLACK,16,0);
+	hal_lcd_show_string(50,88,(uint8_t *)"game",BRRED,BLACK,16,0);
+	hal_lcd_show_string(50,104,(uint8_t *)"system set up",BRRED,BLACK,16,0);
 	lcd_show_cursor(30,24,key_ctrl.up_down);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
@@ -209,7 +214,7 @@ static void key3_short(void)
 	{
     if(lcd_display.real_state==LCD_DISPLAY_MENU)
 		{
-			if(key_ctrl.up_down<5) key_ctrl.up_down++;
+			if(key_ctrl.up_down<(MENU_OPTIONS_NUM-1)) key_ctrl.up_down++;
 			lcd_display.state=LCD_DISPLAY_MENU;
 		}
 	}
