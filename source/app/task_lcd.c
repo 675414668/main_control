@@ -29,12 +29,18 @@ typedef struct
 }lcd_display_t;
 lcd_display_t lcd_display;
 
+typedef  struct
+{
+	uint8_t up_down;
+}key_ctrl_t;
+key_ctrl_t key_ctrl;
+
 static void lcd_data_init(void);
 static void lcd_show_init(void);
 static void lcd_waiting_point(void);
 static void lcd_show_astronaut(void);
 static void lcd_show_menu(void);
-
+static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num);
 
 static void key_null(void);
 static void key1_short(void);
@@ -87,6 +93,7 @@ void task_key_scan(void)
 
 static void lcd_show_init(void)
 {
+	hal_lcd_fill(0,0,280,145,BLACK);
 	hal_lcd_show_string(30,0,(uint8_t *)"system begin",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,16,(uint8_t *)"system clock set over",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,32,(uint8_t *)"cpu frequency:84M HZ",BRRED,BLACK,16,0);
@@ -117,6 +124,12 @@ static void lcd_waiting_point(void)
 	}
 }
 
+static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
+{
+	hal_lcd_fill(30,24,46,240,BLACK);
+	hal_lcd_show_string(x,y+key_num*16,(uint8_t *)"->",BRRED,BLACK,16,0);
+}
+
 static void lcd_show_astronaut(void)
 {
 	lcd_display.astronaut_num=hal_lcd_get_astronaut_image_num();
@@ -144,8 +157,9 @@ static void lcd_show_astronaut(void)
 
 static void lcd_show_menu(void)
 {
-	hal_lcd_fill(0,0,280,145,BLACK);
-	hal_lcd_fill(0,180,230,240,BLACK);
+	hal_lcd_show_string(116,0,(uint8_t *)"MENU",BRRED,BLACK,24,0);
+	hal_lcd_show_string(50,24,(uint8_t *)"laser control",BRRED,BLACK,16,0);
+	lcd_show_cursor(30,24,key_ctrl.up_down);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
 
@@ -162,16 +176,16 @@ static void key1_short(void)
 		{
 			lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
 			lcd_display.real_state=LCD_DISPLAY_MENU;
-		}			
+		  hal_lcd_fill(0,0,280,240,BLACK);
+		}
 		else if(lcd_display.real_state==LCD_DISPLAY_MENU)
 		{
-			lcd_display.state=LCD_DISPLAY_INIT;//will turn to gif
-			lcd_display.real_state=LCD_DISPLAY_INIT;
+			if(key_ctrl.up_down>0) key_ctrl.up_down--;
+			lcd_display.state=LCD_DISPLAY_MENU;
 		}
 	}
 	
 	hal_set_key_press(KEY_NULL);
-	
 }
 
 static void key1_long(void)
@@ -191,7 +205,15 @@ static void key2_long(void)
 
 static void key3_short(void)
 {
-
+	if(lcd_display.state==LCD_DISPLAY_ASTRONAUT)
+	{
+    if(lcd_display.real_state==LCD_DISPLAY_MENU)
+		{
+			if(key_ctrl.up_down<5) key_ctrl.up_down++;
+			lcd_display.state=LCD_DISPLAY_MENU;
+		}
+	}
+	hal_set_key_press(KEY_NULL);
 }
 
 static void key3_long(void)
