@@ -110,14 +110,16 @@ static void lcd_show_init(void)
 {
 	hal_lcd_fill(0,0,280,145,BLACK);
 	hal_lcd_show_string(30,0,(uint8_t *)"system begin",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,16,(uint8_t *)"system clock set over",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,16,(uint8_t *)"system clock init",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,32,(uint8_t *)"cpu frequency:84M HZ",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,48,(uint8_t *)"usart set over",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,48,(uint8_t *)"usart init",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,64,(uint8_t *)"usaer1 baudrate:115200",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,80,(uint8_t *)"led set over",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,96,(uint8_t *)"keyboard set over",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,112,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,128,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,80,(uint8_t *)"lcd init",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,96,(uint8_t *)"keyboard init",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,112,(uint8_t *)"laser init",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,128,(uint8_t *)"user data init",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,144,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,16,0);
+	hal_lcd_show_string(30,160,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,16,0);
 	//hal_lcd_show_string(30,180,(uint8_t *)"Loading",BRRED,BLACK,32,0);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
@@ -146,9 +148,9 @@ static void lcd_press_any_key_to_continuet(void)
 	{
 		switch (lcd_display.point_num)
 		{
-			case 1:{hal_lcd_show_string(50,170,(uint8_t *)"press any key",BRRED,BLACK,24,0); hal_lcd_show_string(50,194,(uint8_t *)"to continue",BRRED,BLACK,24,0); break;}
-			case 2:{hal_lcd_show_string(50,170,(uint8_t *)"press any key",BRRED,BLACK,24,0); hal_lcd_show_string(50,194,(uint8_t *)"to continue",BRRED,BLACK,24,0); break;}
-			case 3:{hal_lcd_show_string(50,170,(uint8_t *)"             ",BRRED,BLACK,24,0); hal_lcd_show_string(50,194,(uint8_t *)"           ",BRRED,BLACK,24,0);break;}
+			case 1:{hal_lcd_show_string(50,185,(uint8_t *)"press any key",BRRED,BLACK,24,0); hal_lcd_show_string(50,210,(uint8_t *)"to continue",BRRED,BLACK,24,0); break;}
+			case 2:{hal_lcd_show_string(50,185,(uint8_t *)"press any key",BRRED,BLACK,24,0); hal_lcd_show_string(50,210,(uint8_t *)"to continue",BRRED,BLACK,24,0); break;}
+			case 3:{hal_lcd_show_string(50,185,(uint8_t *)"             ",BRRED,BLACK,24,0); hal_lcd_show_string(50,210,(uint8_t *)"           ",BRRED,BLACK,24,0);break;}
 			default:{break;}
 		}
 		lcd_display.point_num=0;
@@ -223,12 +225,12 @@ static void lcd_show_laser_control(void)
 	hal_lcd_show_string(62,0,(uint8_t *)"LASER CONTROL",BRRED,BLACK,24,0);
 	hal_lcd_show_string(50,24,(uint8_t *)"mode:",BRRED,BLACK,16,0);
 	hal_lcd_show_string(50,40,(uint8_t *)"state:",BRRED,BLACK,16,0);
-	if(laser_ctrl.mode_value==0)      hal_lcd_show_string(140,24,(uint8_t *)"single",BRRED,BLACK,16,0);
-	else if(laser_ctrl.mode_value==1) hal_lcd_show_string(140,24,(uint8_t *)"auto  ",BRRED,BLACK,16,0);
-	if(laser_ctrl.state_value==0)      hal_lcd_show_string(140,40,(uint8_t *)"close",BRRED,BLACK,16,0);
+	if(laser_ctrl.mode_value==0)      hal_lcd_show_string(115,24,(uint8_t *)"single",BRRED,BLACK,16,0);
+	else if(laser_ctrl.mode_value==1) hal_lcd_show_string(115,24,(uint8_t *)"auto  ",BRRED,BLACK,16,0);
+	if(laser_ctrl.state_value==0)      hal_lcd_show_string(115,40,(uint8_t *)"close",BRRED,BLACK,16,0);
 	else if(laser_ctrl.state_value==1) 
 	{
-		hal_lcd_show_string(140,40,(uint8_t *)"open ",BRRED,BLACK,16,0);
+		hal_lcd_show_string(115,40,(uint8_t *)"open ",BRRED,BLACK,16,0);
 	}
 	lcd_show_cursor(30,24,key_ctrl.up_down);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
@@ -239,23 +241,23 @@ static void lcd_show_laser_control_set(void)
 	if(lcd_display.laser_set==1) //set mode
 	{
 		hal_lcd_fill(30,24,30+16,24+16*LASER_CTRL_OPTIONS_NUM,BLACK);//clear last cursor
-		hal_lcd_draw_rectangle(50,60,230,220,BRRED);
-		hal_lcd_draw_line(50,96,230,96,BRRED);
-		hal_lcd_show_string(116,70,(uint8_t *)"mode set",BRRED,BLACK,16,0);
-		hal_lcd_show_string(80,100,(uint8_t *)"single",BRRED,BLACK,16,0);
-		hal_lcd_show_string(80,116,(uint8_t *)"auto",BRRED,BLACK,16,0);
-		lcd_show_cursor(64,100,key_ctrl.up_down);
+		hal_lcd_draw_rectangle(180,30,275,180,BRRED);
+		hal_lcd_draw_line(180,60,275,60,BRRED);
+		hal_lcd_show_string(195,37,(uint8_t *)"mode set",BRRED,BLACK,16,0);
+		hal_lcd_show_string(205,65,(uint8_t *)"single",BRRED,BLACK,16,0);
+		hal_lcd_show_string(205,81,(uint8_t *)"auto",BRRED,BLACK,16,0);
+		lcd_show_cursor(185,65,key_ctrl.up_down);
 		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 	}
 	else if(lcd_display.laser_set==2) //set state
 	{
 		hal_lcd_fill(30,24,30+16,24+16*LASER_CTRL_OPTIONS_NUM,BLACK);//clear last cursor
-		hal_lcd_draw_rectangle(50,60,230,220,BRRED);
-		hal_lcd_draw_line(50,96,230,96,BRRED);
-		hal_lcd_show_string(112,70,(uint8_t *)"state set",BRRED,BLACK,16,0);
-		hal_lcd_show_string(80,100,(uint8_t *)"close",BRRED,BLACK,16,0);
-		hal_lcd_show_string(80,116,(uint8_t *)"open",BRRED,BLACK,16,0);
-		lcd_show_cursor(64,100,key_ctrl.up_down);
+		hal_lcd_draw_rectangle(180,30,275,180,BRRED);
+		hal_lcd_draw_line(180,60,275,60,BRRED);
+		hal_lcd_show_string(195,37,(uint8_t *)"state set",BRRED,BLACK,16,0);
+		hal_lcd_show_string(205,65,(uint8_t *)"close",BRRED,BLACK,16,0);
+		hal_lcd_show_string(205,81,(uint8_t *)"open",BRRED,BLACK,16,0);
+		lcd_show_cursor(185,65,key_ctrl.up_down);
 		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 	}
 }
@@ -331,7 +333,7 @@ static void key2_short(void)
 		lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
 		key_ctrl.up_down=0;
-		hal_lcd_fill(50,60,231,221,BLACK);
+		hal_lcd_fill(180,30,276,181,BLACK);
 	}
 	hal_set_key_press(KEY_NULL);
 }
@@ -370,7 +372,7 @@ static void key3_short(void)
 		{
 			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
-			hal_lcd_fill(50,60,231,221,BLACK);
+			hal_lcd_fill(180,30,276,181,BLACK);
 			laser_ctrl.mode_value=key_ctrl.up_down;
 			key_ctrl.up_down=0;
 			lcd_display.laser_set=0;
@@ -379,7 +381,7 @@ static void key3_short(void)
 		{
 			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
-			hal_lcd_fill(50,60,231,221,BLACK);
+			hal_lcd_fill(180,30,276,181,BLACK);
 			laser_ctrl.state_value=key_ctrl.up_down;
 			key_ctrl.up_down=0;
 			lcd_display.laser_set=0;
