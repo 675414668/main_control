@@ -38,7 +38,8 @@ key_ctrl_t key_ctrl;
 
 static void lcd_data_init(void);
 static void lcd_show_init(void);
-static void lcd_waiting_point(void);
+//static void lcd_waiting_point(void);
+static void lcd_press_any_key_to_continuet(void);
 static void lcd_show_astronaut(void);
 static void lcd_show_menu(void);
 static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num);
@@ -106,27 +107,42 @@ static void lcd_show_init(void)
 	hal_lcd_show_string(30,96,(uint8_t *)"keyboard set over",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,112,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,16,0);
 	hal_lcd_show_string(30,128,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,16,0);
-	hal_lcd_show_string(30,180,(uint8_t *)"Loading",BRRED,BLACK,32,0);
+	//hal_lcd_show_string(30,180,(uint8_t *)"Loading",BRRED,BLACK,32,0);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
 
-static void lcd_waiting_point(void)
+//static void lcd_waiting_point(void)
+//{
+//	lcd_display.point_num=hal_lcd_get_waiting_point();
+//	if(lcd_display.real_state==LCD_DISPLAY_INIT)
+//	{
+//		switch (lcd_display.point_num)
+//		{
+//			case 1:{hal_lcd_show_string(145,180,(uint8_t *)"   ",BRRED,BLACK,32,0); break;}
+//			case 2:{hal_lcd_show_string(145,180,(uint8_t *)".  ",BRRED,BLACK,32,0); break;}
+//			case 3:{hal_lcd_show_string(145,180,(uint8_t *)".. ",BRRED,BLACK,32,0); break;}
+//			case 4:{hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
+//			default:{break;}
+//		}
+//		lcd_display.point_num=0;
+//	}
+//}
+
+static void lcd_press_any_key_to_continuet(void)
 {
-	lcd_display.point_num=hal_lcd_get_waiting_point();
+	lcd_display.point_num=hal_lcd_get_waiting_time();
 	if(lcd_display.real_state==LCD_DISPLAY_INIT)
 	{
 		switch (lcd_display.point_num)
 		{
-			case 1:{hal_lcd_show_string(145,180,(uint8_t *)"   ",BRRED,BLACK,32,0); break;}
-			case 2:{hal_lcd_show_string(145,180,(uint8_t *)".  ",BRRED,BLACK,32,0); break;}
-			case 3:{hal_lcd_show_string(145,180,(uint8_t *)".. ",BRRED,BLACK,32,0); break;}
-			case 4:{hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
+			case 1:{hal_lcd_show_string(50,170,(uint8_t *)"press any key",BRRED,BLACK,24,0); hal_lcd_show_string(50,194,(uint8_t *)"to continue",BRRED,BLACK,24,0); break;}
+			case 2:{hal_lcd_show_string(50,170,(uint8_t *)"press any key",BRRED,BLACK,24,0); hal_lcd_show_string(50,194,(uint8_t *)"to continue",BRRED,BLACK,24,0); break;}
+			case 3:{hal_lcd_show_string(50,170,(uint8_t *)"             ",BRRED,BLACK,24,0); hal_lcd_show_string(50,194,(uint8_t *)"           ",BRRED,BLACK,24,0);break;}
 			default:{break;}
 		}
 		lcd_display.point_num=0;
 	}
 }
-
 static void lcd_show_astronaut(void)
 {
 	lcd_display.astronaut_num=hal_lcd_get_astronaut_image_num();
@@ -148,7 +164,7 @@ static void lcd_show_astronaut(void)
 		case 14:{hal_lcd_show_picture(235,200,45,38,gImage_13); break;}
 		default:{break;}
 	}
-	lcd_waiting_point();
+	lcd_press_any_key_to_continuet();
 	lcd_display.astronaut_num=0;
 }
 
@@ -182,22 +198,19 @@ static void key_null(void)
 
 static void key1_short(void)
 {
-	if(lcd_display.state==LCD_DISPLAY_ASTRONAUT)
+	if(lcd_display.real_state==LCD_DISPLAY_INIT)
 	{
-		if(lcd_display.real_state==LCD_DISPLAY_INIT)
-		{
-			lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
-			lcd_display.real_state=LCD_DISPLAY_MENU;
-		  hal_lcd_fill(0,0,280,240,BLACK);
-		}
-		else if(lcd_display.real_state==LCD_DISPLAY_MENU)
-		{
-			if(key_ctrl.up_down<(MENU_OPTIONS_NUM-1)) key_ctrl.up_down++;
-			else key_ctrl.up_down=0;
-			lcd_display.state=LCD_DISPLAY_MENU;
-		}
+		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
+		lcd_display.real_state=LCD_DISPLAY_MENU;
+		hal_lcd_fill(0,0,280,240,BLACK);
 	}
-	
+	else if(lcd_display.real_state==LCD_DISPLAY_MENU)
+	{
+		if(key_ctrl.up_down<(MENU_OPTIONS_NUM-1)) key_ctrl.up_down++;
+		else key_ctrl.up_down=0;
+		lcd_display.state=LCD_DISPLAY_MENU;
+	}
+
 	hal_set_key_press(KEY_NULL);
 }
 
@@ -208,13 +221,20 @@ static void key1_long(void)
 
 static void key2_short(void)
 {
-	if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
+	if(lcd_display.real_state==LCD_DISPLAY_INIT)
+	{
+		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
+		lcd_display.real_state=LCD_DISPLAY_MENU;
+		hal_lcd_fill(0,0,280,240,BLACK);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
 	{
 		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_MENU;
 		key_ctrl.up_down=0;
 		hal_lcd_fill(0,0,280,240,BLACK);
 	}
+	hal_set_key_press(KEY_NULL);
 }
 
 static void key2_long(void)
@@ -224,12 +244,19 @@ static void key2_long(void)
 
 static void key3_short(void)
 {
-	if(lcd_display.real_state==LCD_DISPLAY_MENU && key_ctrl.up_down==0)
+	if(lcd_display.real_state==LCD_DISPLAY_INIT)
+	{
+		lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
+		lcd_display.real_state=LCD_DISPLAY_MENU;
+		hal_lcd_fill(0,0,280,240,BLACK);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_MENU && key_ctrl.up_down==0)
 	{
 		lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 		lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
 		hal_lcd_fill(0,0,280,240,BLACK);
 	}
+	hal_set_key_press(KEY_NULL);
 }
 
 static void key3_long(void)

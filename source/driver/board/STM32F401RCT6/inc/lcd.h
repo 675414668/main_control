@@ -76,9 +76,9 @@
 #define ASTRONAUT_IMAGE_SPEED  (20)
 #define ASTRONAUT_IMAGE_TIM    (ASTRONAUT_IMAGE_NUM*ASTRONAUT_IMAGE_SPEED)
 
-#define WAITING_POINT_NUM    (4)
-#define WAITING_POINT_SPEED  (1000)
-#define WAITING_POINT_TIM    (WAITING_POINT_NUM*WAITING_POINT_SPEED)
+#define WAITING_NUM    (3)
+#define WAITING_SPEED  (1000)
+#define WAITING_TIM    (WAITING_NUM*WAITING_SPEED)
 
 void bsp_lcd_init(void);
 void bsp_lcd_gpio_init(void);//≥ı ºªØGPIO
@@ -92,7 +92,7 @@ void bsp_key_init(void);
 uint8_t bsp_get_key_press(void);
 void bsp_set_key_press(uint8_t state);
 uint8_t bsp_lcd_get_astronaut_image_num(void);
-uint8_t bsp_lcd_get_waiting_point(void);
+uint8_t bsp_lcd_get_waiting_time(void);
 #endif 
 
 

@@ -25,7 +25,7 @@ typedef struct
 	uint16_t gif_timecount;
 	uint8_t astronaut_image_num;
 	uint16_t waiting_count;
-	uint8_t waiting_point;
+	uint8_t waiting_time;
 }lcd_tim_ctrl_t;
 lcd_tim_ctrl_t lcd_tim_ctrl;
 
@@ -35,7 +35,7 @@ static void bsp_key_gpio_init(void);
 static void bsp_key_tim_init(void);
 static void bsp_key_scan(void);
 static void lcd_astronaut_image_change(void);
-static void lcd_waiting_point_change(void);
+static void lcd_waiting_time_change(void);
 
 void bsp_lcd_init(void)
 {
@@ -49,7 +49,7 @@ void bsp_key_init(void)
 	bsp_key_tim_init();
 	lcd_tim_ctrl.astronaut_image_num=1;
 	lcd_tim_ctrl.gif_timecount=0;
-	lcd_tim_ctrl.waiting_point=1;
+	lcd_tim_ctrl.waiting_time=1;
 }
 
 void bsp_lcd_gpio_init(void)
@@ -410,9 +410,9 @@ static void lcd_astronaut_image_change(void)
 		}
 	}
 }
-static void lcd_waiting_point_change(void)
+static void lcd_waiting_time_change(void)
 {
-	if(lcd_tim_ctrl.waiting_count==WAITING_POINT_TIM)
+	if(lcd_tim_ctrl.waiting_count==WAITING_TIM)
 	{
 		lcd_tim_ctrl.waiting_count=1;
 	}
@@ -420,15 +420,15 @@ static void lcd_waiting_point_change(void)
 	{
 		lcd_tim_ctrl.waiting_count++;
 	}
-	if((lcd_tim_ctrl.waiting_count%WAITING_POINT_SPEED)==0)
+	if((lcd_tim_ctrl.waiting_count%WAITING_SPEED)==0)
 	{
-		if(lcd_tim_ctrl.waiting_point==WAITING_POINT_NUM)
+		if(lcd_tim_ctrl.waiting_time==WAITING_NUM)
 		{
-			lcd_tim_ctrl.waiting_point=1;
+			lcd_tim_ctrl.waiting_time=1;
 		}
 		else
 		{
-			lcd_tim_ctrl.waiting_point++;
+			lcd_tim_ctrl.waiting_time++;
 		}
 	}
 }
@@ -436,9 +436,9 @@ uint8_t bsp_lcd_get_astronaut_image_num(void)
 {
 	return lcd_tim_ctrl.astronaut_image_num;
 }
-uint8_t bsp_lcd_get_waiting_point(void)
+uint8_t bsp_lcd_get_waiting_time(void)
 {
-	return lcd_tim_ctrl.waiting_point;
+	return lcd_tim_ctrl.waiting_time;
 }
 void KEY_TIM_IRQHANDLER(void)
 {
@@ -446,7 +446,7 @@ void KEY_TIM_IRQHANDLER(void)
 	{
 		bsp_key_scan();
 		lcd_astronaut_image_change();
-		lcd_waiting_point_change();
+		lcd_waiting_time_change();
 		TIM_ClearITPendingBit(KEY_TIM,TIM_IT_Update);
 	}
 }

@@ -23,7 +23,7 @@ uint8_t hal_lcd_get_astronaut_image_num(void)
 	return  bsp_lcd_get_astronaut_image_num();
 }
 
-uint8_t hal_lcd_get_waiting_point(void)
+uint8_t hal_lcd_get_waiting_time(void)
 {
-	return bsp_lcd_get_waiting_point();
+	return bsp_lcd_get_waiting_time();
 }
