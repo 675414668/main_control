@@ -36,7 +36,7 @@
 #define MENU_TITLE_Y (0)
 #define LASER_CTRL_TITLE_X (62)
 #define LASER_CTRL_TITLE_Y (0)
-#define SYSTEM_SET_TITLE_X (62)
+#define SYSTEM_SET_TITLE_X (80)
 #define SYSTEM_SET_TITLE_Y (0)
 
 #define CURSOR_X  (30)
