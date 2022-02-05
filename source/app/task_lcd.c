@@ -835,6 +835,7 @@ static void key3_short(void)
 			lcd_display.state=LCD_DISPLAY_STOPWATCH;
 		  lcd_display.real_state=LCD_DISPLAY_STOPWATCH;
 			lcd_display.stopwatch_ctrl=0;
+			hal_stopwatch_ctrl(STOP);
 			hal_stopwatch_timebuff_clear();
 		}
 		else if(key_ctrl.up_down==2)
