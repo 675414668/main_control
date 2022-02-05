@@ -232,18 +232,18 @@ static void lcd_show_menu(void)
 		hal_lcd_show_string(MENU_TITLE_X,MENU_TITLE_Y,(uint8_t *)"MENU",BRRED,BLACK,TITLE_SIZE,COVER_MODE);
 		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y,(uint8_t *)"laser control",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,(uint8_t *)"rgb led control",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,(uint8_t *)"stopwatch",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+3*MAIN_WORD_SIZE,(uint8_t *)"wifi connection",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,(uint8_t *)"wifi connection",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+3*MAIN_WORD_SIZE,(uint8_t *)"stopwatch",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+4*MAIN_WORD_SIZE,(uint8_t *)"game",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+5*MAIN_WORD_SIZE,(uint8_t *)"system set",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 	}
 	else if(lcd_display.language_value==1)
 	{
-		hal_lcd_font_GB2312_string(MENU_TITLE_X,MENU_TITLE_Y,TITLE_SIZE,(uint8_t *)"菜单",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(LCD_X2/2-TITLE_SIZE*2/2,MENU_TITLE_Y,TITLE_SIZE,(uint8_t *)"菜单",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y,MAIN_WORD_SIZE_C,(uint8_t *)"激光控制",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"氛围灯控制",BRRED,BLACK);
-		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"秒表",BRRED,BLACK);
-		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+3*MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"无线连接",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"无线连接",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+3*MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"秒表",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+4*MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"游戏",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+5*MAIN_WORD_SIZE,MAIN_WORD_SIZE_C,(uint8_t *)"系统设置",BRRED,BLACK);
 	}
@@ -349,7 +349,7 @@ static void lcd_show_laser_control(void)
 	}
 	else if (lcd_display.language_value==1)
 	{
-		hal_lcd_font_GB2312_string(LASER_CTRL_TITLE_X,LASER_CTRL_TITLE_Y,TITLE_SIZE,(uint8_t *)"激光控制",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(LCD_X2/2-TITLE_SIZE*4/2,LASER_CTRL_TITLE_Y,TITLE_SIZE,(uint8_t *)"激光控制",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y,BELONG_WORD_SIZE_C,(uint8_t *)"模式:",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"状态:",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"离开",BRRED,BLACK);
@@ -414,7 +414,7 @@ static void lcd_show_laser_control_set(void)
 			hal_lcd_draw_line(SET_LINE_X1,SET_LINE_Y1,SET_LINE_X2,SET_LINE_Y2,BRRED);
 			hal_lcd_font_GB2312_string(208,37,SET_WORD_SIZE_C,(uint8_t *)"状态",BRRED,BLACK);
 			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y,SET_WORD_SIZE_C,(uint8_t *)"关闭",BRRED,BLACK);
-			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,SET_WORD_SIZE_C,(uint8_t *)"打开",BRRED,BLACK);
+			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,SET_WORD_SIZE_C,(uint8_t *)"开启",BRRED,BLACK);
 			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+2*SET_WORD_SIZE,SET_WORD_SIZE_C,(uint8_t *)"离开",BRRED,BLACK);
 			lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
 			lcd_display.state=LCD_DISPLAY_ASTRONAUT;
@@ -434,7 +434,7 @@ static void lcd_show_system(void)
 	}
 	else if(lcd_display.language_value==1)
 	{
-		hal_lcd_font_GB2312_string(SYSTEM_SET_TITLE_X,SYSTEM_SET_TITLE_Y,TITLE_SIZE,(uint8_t *)"系统设置",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(LCD_X2/2-TITLE_SIZE*4/2,SYSTEM_SET_TITLE_Y,TITLE_SIZE,(uint8_t *)"系统设置",BRRED,BLACK);
    	hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y,BELONG_WORD_SIZE_C,(uint8_t *)"语言:",BRRED,BLACK);
 	  hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"关于",BRRED,BLACK);
 	  hal_lcd_font_GB2312_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"离开",BRRED,BLACK);
