@@ -69,8 +69,8 @@
 #define KEY_TIM_IRQN           TIM3_IRQn
 #define KEY_TIM_IRQHANDLER     TIM3_IRQHandler
 
-#define KEY_S_TIM  (50)
-#define KEY_L_TIM  (2000)
+#define KEY_S_TIM  (100)
+#define KEY_L_TIM  (1500)
 
 #define ASTRONAUT_IMAGE_NUM    (14)
 #define ASTRONAUT_IMAGE_SPEED  (20)

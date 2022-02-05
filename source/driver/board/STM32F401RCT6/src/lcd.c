@@ -346,7 +346,11 @@ static void bsp_key_scan(void)
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY1_PIN)==0)
 	{
 		key_crl.key1_count++;
-		if(key_crl.key1_count>KEY_L_TIM)  key_crl.press = KEY1_L;
+//		if(key_crl.key1_count>KEY_L_TIM)
+//		{
+//			key_crl.press = KEY1_L;
+//			key_crl.key1_count=0;
+//		}			
 	}
 	else
 	{
@@ -357,7 +361,11 @@ static void bsp_key_scan(void)
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY2_PIN)==0)
 	{
 		key_crl.key2_count++;
-		if(key_crl.key2_count>KEY_L_TIM)  key_crl.press = KEY2_L;
+//		if(key_crl.key2_count>KEY_L_TIM)  
+//		{
+//			key_crl.press = KEY2_L;
+//			key_crl.key2_count=0;
+//		}
 	}
 	else
 	{
@@ -368,7 +376,11 @@ static void bsp_key_scan(void)
 	if(GPIO_ReadInputDataBit(KEY_PORT,KEY3_PIN)==0)
 	{
 		key_crl.key3_count++;
-		if(key_crl.key3_count>KEY_L_TIM)  key_crl.press = KEY3_L;
+//		if(key_crl.key3_count>KEY_L_TIM)
+//		{
+//			key_crl.press = KEY3_L;
+//			key_crl.key3_count=0;
+//		}			
 	}
 	else
 	{
