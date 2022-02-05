@@ -16,12 +16,12 @@
 #define LCD_Y2 (240)
 
 #define SHOW_WORD_X       (30)
-#define SHOW_WORD_Y       (0)
+#define SHOW_WORD_Y       (10)
 #define SHOW_WORD_SIZE    (16)
 #define SHOW_WORD_SIZE_C    (12)
 
 #define PRESS_KEY_X    (50)
-#define PRESS_KEY_Y    (185)
+#define PRESS_KEY_Y    (195)
 #define PRESS_KEY_SIZE (24)
 #define PRESS_KEY_SIZE_C (16)
 
@@ -39,15 +39,15 @@
 #define SYSTEM_SET_TITLE_Y (0)
 
 #define CURSOR_X  (30)
-#define CURSOR_Y  (TITLE_SIZE)
+#define CURSOR_Y  (TITLE_SIZE+10)
 #define CURSOR_SIZE  (16)
 #define CURSOR_SIZE_C  (12)
 #define MAIN_WORD_X (CURSOR_X+CURSOR_SIZE)
-#define MAIN_WORD_Y (TITLE_SIZE)
+#define MAIN_WORD_Y (TITLE_SIZE+10)
 #define MAIN_WORD_SIZE (16)
 #define MAIN_WORD_SIZE_C (12)
 #define BELONG_WORD_X (120)
-#define BELONG_WORD_Y (TITLE_SIZE)
+#define BELONG_WORD_Y (TITLE_SIZE+10)
 #define BELONG_WORD_SIZE (MAIN_WORD_SIZE)
 #define BELONG_WORD_SIZE_C (MAIN_WORD_SIZE_C)
 

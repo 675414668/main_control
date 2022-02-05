@@ -22,6 +22,7 @@ enum
 	LCD_DISPLAY_LASER_CTRL_SET,
 	LCD_DISPLAY_SYSTEM,
 	LCD_DISPLAY_SYSTEM_SET,
+	LCD_DISPLAY_SYSTEM_ABOUT,
 };
 
 typedef struct 
@@ -60,6 +61,7 @@ static void lcd_show_laser_control(void);
 static void lcd_show_laser_control_set(void);
 static void lcd_show_system(void);
 static void lcd_show_system_set(void);
+static void lcd_show_system_about(void);
 
 static void key_null(void);
 static void key1_short(void);
@@ -96,6 +98,7 @@ void task_lcd_display(void)
 		case LCD_DISPLAY_LASER_CTRL_SET:{ lcd_show_laser_control_set(); break ;}
 		case LCD_DISPLAY_SYSTEM:        { lcd_show_system();            break ;}
 		case LCD_DISPLAY_SYSTEM_SET:    { lcd_show_system_set();        break ;}
+		case LCD_DISPLAY_SYSTEM_ABOUT:  { lcd_show_system_about();        break ;}
 		default: {break;}
 			
 	}
@@ -187,8 +190,8 @@ static void lcd_press_any_key_to_continuet(void)
 		{
 			switch (lcd_display.point_num)
 			{
-				case 1:{hal_lcd_font_GB2312_string(PRESS_KEY_X,PRESS_KEY_Y,PRESS_KEY_SIZE_C,(uint8_t *)"按压任意按键",BRRED,BLACK); hal_lcd_font_GB2312_string(PRESS_KEY_X,PRESS_KEY_Y+PRESS_KEY_SIZE,PRESS_KEY_SIZE_C,(uint8_t *)"继续",BRRED,BLACK); break;}
-				case 2:{hal_lcd_font_GB2312_string(PRESS_KEY_X,PRESS_KEY_Y,PRESS_KEY_SIZE_C,(uint8_t *)"按压任意按键",BRRED,BLACK); hal_lcd_font_GB2312_string(PRESS_KEY_X,PRESS_KEY_Y+PRESS_KEY_SIZE,PRESS_KEY_SIZE_C,(uint8_t *)"继续",BRRED,BLACK); break;}
+				case 1:{hal_lcd_font_GB2312_string(PRESS_KEY_X,PRESS_KEY_Y,PRESS_KEY_SIZE_C,(uint8_t *)"按压任意按键继续",BRRED,BLACK);  break;}
+				case 2:{hal_lcd_font_GB2312_string(PRESS_KEY_X,PRESS_KEY_Y,PRESS_KEY_SIZE_C,(uint8_t *)"按压任意按键继续",BRRED,BLACK);  break;}
 				case 3:{hal_lcd_fill(PRESS_KEY_X,PRESS_KEY_Y,PRESS_KEY_X+PRESS_KEY_SIZE*6,PRESS_KEY_Y+PRESS_KEY_SIZE*2,BLACK);break;}
 				default:{break;}
 			}
@@ -477,6 +480,35 @@ static void lcd_show_system_set(void)
 
 }
 
+static void lcd_show_system_about(void)
+{
+	if(lcd_display.language_value==0)
+	{
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y,(uint8_t *)"mcu type:stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"flash:256kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"ram:48kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd type:240x280 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard:double button",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+	}
+	else if(lcd_display.language_value==1)
+	{
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y,(uint8_t *)":stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+1*SHOW_WORD_SIZE,(uint8_t *)":84M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"存储空间",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":256kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":48kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"串口波特率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)":115200",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"显示屏",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)":240x280 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"键盘",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+2*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)":",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);hal_lcd_font_GB2312_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"双按键",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"硬件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"软件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+	}
+	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
+}
+
 static void key_null(void)
 {
 	
@@ -532,6 +564,12 @@ static void key1_short(void)
 		  else key_ctrl.up_down=0;
 		  lcd_display.state=LCD_DISPLAY_SYSTEM_SET;
 		}
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM_ABOUT)
+	{
+		lcd_display.state=LCD_DISPLAY_SYSTEM;//will turn to gif
+	  lcd_display.real_state=LCD_DISPLAY_SYSTEM;
+		hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
 	}
 
 	hal_set_key_press(KEY_NULL);
@@ -638,8 +676,8 @@ static void key3_short(void)
 		}
 		else if(key_ctrl.up_down==1)
 		{
-			lcd_display.state=LCD_DISPLAY_INIT;//will turn to gif
-			lcd_display.real_state=LCD_DISPLAY_INIT;
+			lcd_display.state=LCD_DISPLAY_SYSTEM_ABOUT;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_SYSTEM_ABOUT;
 			hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
 		}
 		else if(key_ctrl.up_down==2)
@@ -675,6 +713,12 @@ static void key3_short(void)
 			key_ctrl.up_down=0;
 			lcd_display.laser_set=0;
 		}
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM_ABOUT)
+	{
+		lcd_display.state=LCD_DISPLAY_SYSTEM;//will turn to gif
+	  lcd_display.real_state=LCD_DISPLAY_SYSTEM;
+		hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
 	}
 	hal_set_key_press(KEY_NULL);
 }
