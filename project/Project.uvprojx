@@ -550,6 +550,11 @@
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_lcd_api.c</FilePath>
             </File>
+            <File>
+              <FileName>hal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\hal\src\hal_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1090,6 +1095,11 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\driver\board\STM32F401RCT6\src\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\driver\board\STM32F401RCT6\src\flash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3706,6 +3716,11 @@
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_lcd_api.c</FilePath>
             </File>
+            <File>
+              <FileName>hal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\hal\src\hal_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4246,6 +4261,11 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\driver\board\STM32F401RCT6\src\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\driver\board\STM32F401RCT6\src\flash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6451,6 +6471,11 @@
               <FileType>1</FileType>
               <FilePath>..\source\hal\src\hal_lcd_api.c</FilePath>
             </File>
+            <File>
+              <FileName>hal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\hal\src\hal_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6595,6 +6620,11 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\driver\board\STM32F401RCT6\src\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\driver\board\STM32F401RCT6\src\flash.c</FilePath>
             </File>
           </Files>
         </Group>

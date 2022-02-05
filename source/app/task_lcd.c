@@ -84,7 +84,7 @@ static void lcd_data_init(void)
 {
 	lcd_display.state=LCD_DISPLAY_INIT;
 	lcd_display.real_state=LCD_DISPLAY_INIT;
-	lcd_display.language_value=1;
+	lcd_display.language_value=hal_get_user_data(LANGUAGE_DATA);
 
 }
 void task_lcd_display(void)
@@ -456,7 +456,7 @@ static void lcd_show_system_set(void)
 			hal_lcd_draw_line(SET_LINE_X1,SET_LINE_Y1,SET_LINE_X2,SET_LINE_Y2,BRRED);
 			hal_lcd_show_string(195,37,(uint8_t *)"language",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 			hal_lcd_show_string(SET_WORD_X,SET_WORD_Y,(uint8_t *)"English",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
-			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"简体中文",BRRED,BLACK);
+			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE+2,BELONG_WORD_SIZE_C,(uint8_t *)"简体中文",BRRED,BLACK);
 			hal_lcd_show_string(SET_WORD_X,SET_WORD_Y+2*SET_WORD_SIZE,(uint8_t *)"exist",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 			lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
 			lcd_display.state=LCD_DISPLAY_ASTRONAUT;
@@ -471,7 +471,7 @@ static void lcd_show_system_set(void)
 			hal_lcd_draw_line(SET_LINE_X1,SET_LINE_Y1,SET_LINE_X2,SET_LINE_Y2,BRRED);
 			hal_lcd_font_GB2312_string(195,37,BELONG_WORD_SIZE_C,(uint8_t *)"语言",BRRED,BLACK);
 			hal_lcd_show_string(SET_WORD_X,SET_WORD_Y,(uint8_t *)"English",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
-			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"简体中文",BRRED,BLACK);
+			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE+2,BELONG_WORD_SIZE_C,(uint8_t *)"简体中文",BRRED,BLACK);
 			hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+2*SET_WORD_SIZE,BELONG_WORD_SIZE_C,(uint8_t *)"离开",BRRED,BLACK);
 			lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
 			lcd_display.state=LCD_DISPLAY_ASTRONAUT;
@@ -499,7 +499,7 @@ static void lcd_show_system_about(void)
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y,(uint8_t *)":stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+1*SHOW_WORD_SIZE,(uint8_t *)":84M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"存储空间",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":256kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":48kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":64kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"串口波特率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)":115200",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"显示屏",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)":240x280 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"键盘",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+2*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)":",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);hal_lcd_font_GB2312_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"双按键",BRRED,BLACK);
@@ -702,6 +702,7 @@ static void key3_short(void)
 			lcd_display.real_state=LCD_DISPLAY_SYSTEM;
 			hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
 			lcd_display.language_value=key_ctrl.up_down;
+			hal_set_user_data(LANGUAGE_DATA,lcd_display.language_value);
 			key_ctrl.up_down=0;
 			lcd_display.system_set=0;
 		}
@@ -732,4 +733,3 @@ static void key_default(void)
 {
 	
 }
-

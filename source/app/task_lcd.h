@@ -5,6 +5,7 @@
 #include "hal_lcd_api.h"
 #include "hal_lcd_font.h"
 #include "lcd_config.h"
+#include "hal_flash.h"
 
 void task_lcd_init(void);
 void task_key_scan(void);

@@ -8,6 +8,7 @@ int main(void)
 	hal_sys_clk_init();
 	hal_delay_init();
 	hal_usart_init(115200);
+	hal_flash_user_data_init();
 	task_led_init();
   task_lcd_init();
 	
