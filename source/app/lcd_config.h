@@ -18,10 +18,12 @@
 #define SHOW_WORD_X       (30)
 #define SHOW_WORD_Y       (0)
 #define SHOW_WORD_SIZE    (16)
+#define SHOW_WORD_SIZE_C    (12)
 
 #define PRESS_KEY_X    (50)
 #define PRESS_KEY_Y    (185)
 #define PRESS_KEY_SIZE (24)
+#define PRESS_KEY_SIZE_C (16)
 
 #define ASTRONAUT_IMAGE_X1 (235)
 #define ASTRONAUT_IMAGE_Y1 (200)
@@ -39,13 +41,15 @@
 #define CURSOR_X  (30)
 #define CURSOR_Y  (TITLE_SIZE)
 #define CURSOR_SIZE  (16)
+#define CURSOR_SIZE_C  (12)
 #define MAIN_WORD_X (CURSOR_X+CURSOR_SIZE)
 #define MAIN_WORD_Y (TITLE_SIZE)
 #define MAIN_WORD_SIZE (16)
-
+#define MAIN_WORD_SIZE_C (12)
 #define BELONG_WORD_X (120)
 #define BELONG_WORD_Y (TITLE_SIZE)
 #define BELONG_WORD_SIZE (MAIN_WORD_SIZE)
+#define BELONG_WORD_SIZE_C (MAIN_WORD_SIZE_C)
 
 #define SET_RECTANGLE_X1  (180)
 #define SET_RECTANGLE_Y1  (TITLE_SIZE+6)
@@ -60,8 +64,10 @@
 #define SET_CURSOR_X  (SET_RECTANGLE_X1+5)
 #define SET_CURSOR_Y  (SET_LINE_Y1+5)
 #define SET_CURSOR_SIZE  (16)
+#define SET_CURSOR_SIZE_C  (12)
 #define SET_WORD_X (SET_CURSOR_X+SET_CURSOR_SIZE)
 #define SET_WORD_Y (SET_CURSOR_Y)
 #define SET_WORD_SIZE (16)
+#define SET_WORD_SIZE_C (12)
 
 #endif 
