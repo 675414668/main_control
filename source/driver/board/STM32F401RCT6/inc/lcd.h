@@ -93,6 +93,9 @@ uint8_t bsp_get_key_press(void);
 void bsp_set_key_press(uint8_t state);
 uint8_t bsp_lcd_get_astronaut_image_num(void);
 uint8_t bsp_lcd_get_waiting_time(void);
+void bsp_get_stopwatch_timebuff(uint8_t *data);
+void bsp_stopwatch_timebuff_clear(void);
+void bsp_stopwatch_ctrl(uint8_t state);
 #endif 
 
 

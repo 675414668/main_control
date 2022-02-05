@@ -23,8 +23,13 @@ enum
 	LCD_DISPLAY_SYSTEM,
 	LCD_DISPLAY_SYSTEM_SET,
 	LCD_DISPLAY_SYSTEM_ABOUT,
+	LCD_DISPLAY_STOPWATCH,
 };
-
+enum 
+{
+	STOP=0,
+	BEGIN,
+};
 typedef struct 
 {
 	uint8_t state;
@@ -34,6 +39,8 @@ typedef struct
 	uint8_t laser_set;//1 mode 2 state
 	uint8_t system_set;//1 language 
 	uint8_t language_value;
+	uint8_t stopwatch_timebuff[15];
+	uint8_t stopwatch_ctrl;//0 stop 1 begin
 }lcd_display_t;
 lcd_display_t lcd_display;
 
@@ -62,6 +69,7 @@ static void lcd_show_laser_control_set(void);
 static void lcd_show_system(void);
 static void lcd_show_system_set(void);
 static void lcd_show_system_about(void);
+static void lcd_show_stopwatch(void);
 
 static void key_null(void);
 static void key1_short(void);
@@ -98,7 +106,8 @@ void task_lcd_display(void)
 		case LCD_DISPLAY_LASER_CTRL_SET:{ lcd_show_laser_control_set(); break ;}
 		case LCD_DISPLAY_SYSTEM:        { lcd_show_system();            break ;}
 		case LCD_DISPLAY_SYSTEM_SET:    { lcd_show_system_set();        break ;}
-		case LCD_DISPLAY_SYSTEM_ABOUT:  { lcd_show_system_about();        break ;}
+		case LCD_DISPLAY_SYSTEM_ABOUT:  { lcd_show_system_about();      break ;}
+		case LCD_DISPLAY_STOPWATCH:     { lcd_show_stopwatch();      break ;}
 		default: {break;}
 			
 	}
@@ -150,7 +159,7 @@ static void lcd_show_init(void)
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+10*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"软件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+10*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 	}
 
-	//hal_lcd_show_string(30,180,(uint8_t *)"Loading",BRRED,BLACK,32,0);
+	//hal_lcd_show_string(30,190,(uint8_t *)"Loading",BRRED,BLACK,32,0);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
 
@@ -161,10 +170,10 @@ static void lcd_show_init(void)
 //	{
 //		switch (lcd_display.point_num)
 //		{
-//			case 1:{hal_lcd_show_string(145,180,(uint8_t *)"   ",BRRED,BLACK,32,0); break;}
-//			case 2:{hal_lcd_show_string(145,180,(uint8_t *)".  ",BRRED,BLACK,32,0); break;}
-//			case 3:{hal_lcd_show_string(145,180,(uint8_t *)".. ",BRRED,BLACK,32,0); break;}
-//			case 4:{hal_lcd_show_string(145,180,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
+//			case 1:{hal_lcd_show_string(145,190,(uint8_t *)"   ",BRRED,BLACK,32,0); break;}
+//			case 2:{hal_lcd_show_string(145,190,(uint8_t *)".  ",BRRED,BLACK,32,0); break;}
+//			case 3:{hal_lcd_show_string(145,190,(uint8_t *)".. ",BRRED,BLACK,32,0); break;}
+//			case 4:{hal_lcd_show_string(145,190,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
 //			default:{break;}
 //		}
 //		lcd_display.point_num=0;
@@ -291,6 +300,27 @@ static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
 				hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
 			}
 		}
+		else if(lcd_display.real_state==LCD_DISPLAY_STOPWATCH)
+		{	
+			if(key_num==0)
+			{
+				hal_lcd_fill(STOPWATCH_WORD_X+90-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+			  hal_lcd_fill(STOPWATCH_WORD_X+190-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+190,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+				hal_lcd_show_string(STOPWATCH_WORD_X-32,STOPWATCH_WORD_Y,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+			}
+			else if(key_num==1)
+			{
+				hal_lcd_fill(STOPWATCH_WORD_X-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+			  hal_lcd_fill(STOPWATCH_WORD_X+190-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+190,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+				hal_lcd_show_string(STOPWATCH_WORD_X+90-32,STOPWATCH_WORD_Y,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+			}
+			else if(key_num==2)
+			{
+				hal_lcd_fill(STOPWATCH_WORD_X-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+			  hal_lcd_fill(STOPWATCH_WORD_X+90-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+				hal_lcd_show_string(STOPWATCH_WORD_X+190-32,STOPWATCH_WORD_Y,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+			}
+		}
 	}
 	else if(lcd_display.language_value==1)
 	{
@@ -328,6 +358,27 @@ static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
 			{
 				hal_lcd_fill(x,y,x+CURSOR_SIZE,y+CURSOR_SIZE*LASER_CTRL_LANGUAGE_SET_NUM,BLACK);
 				hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE_C,COVER_MODE);
+			}
+		}
+		else if(lcd_display.real_state==LCD_DISPLAY_STOPWATCH)
+		{	
+			if(key_num==0)
+			{
+				hal_lcd_fill(STOPWATCH_WORD_X+90-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+			  hal_lcd_fill(STOPWATCH_WORD_X+190-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+190,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+				hal_lcd_show_string(STOPWATCH_WORD_X-32,STOPWATCH_WORD_Y,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+			}
+			else if(key_num==1)
+			{
+				hal_lcd_fill(STOPWATCH_WORD_X-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+			  hal_lcd_fill(STOPWATCH_WORD_X+190-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+190,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+				hal_lcd_show_string(STOPWATCH_WORD_X+90-32,STOPWATCH_WORD_Y,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+			}
+			else if(key_num==2)
+			{
+				hal_lcd_fill(STOPWATCH_WORD_X-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+			  hal_lcd_fill(STOPWATCH_WORD_X+90-32,STOPWATCH_WORD_Y,STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y+STOPWATCH_WORD_SIZE,BLACK);
+				hal_lcd_show_string(STOPWATCH_WORD_X+190-32,STOPWATCH_WORD_Y,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
 			}
 		}
 	}
@@ -489,7 +540,7 @@ static void lcd_show_system_about(void)
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"flash:256kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"ram:48kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd type:240x280 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd type:240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard:double button",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
@@ -501,7 +552,7 @@ static void lcd_show_system_about(void)
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"存储空间",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":256kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":64kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"串口波特率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)":115200",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"显示屏",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)":240x280 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"显示屏",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)":240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"键盘",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+2*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)":",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);hal_lcd_font_GB2312_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"双按键",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"硬件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"软件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
@@ -509,6 +560,30 @@ static void lcd_show_system_about(void)
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
 
+static void lcd_show_stopwatch(void)
+{
+	hal_get_stopwatch_timebuff(lcd_display.stopwatch_timebuff);
+	hal_lcd_show_string(STOPWATCH_X,STOPWATCH_Y,lcd_display.stopwatch_timebuff,BRRED,BLACK,STOPWATCH_SIZE,COVER_MODE);
+	if(lcd_display.language_value==0)
+	{
+		if(lcd_display.stopwatch_ctrl==0)hal_lcd_show_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,(uint8_t *)"begin",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		else if(lcd_display.stopwatch_ctrl==1)hal_lcd_show_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,(uint8_t *)"stop",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		else if(lcd_display.stopwatch_ctrl==2)hal_lcd_show_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,(uint8_t *)"continue",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+
+		hal_lcd_show_string(STOPWATCH_WORD_X+50,STOPWATCH_WORD_Y,(uint8_t *)"clear",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y,(uint8_t *)"exist",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+	}
+	else if(lcd_display.language_value==1)
+	{
+		if(lcd_display.stopwatch_ctrl==0)	    hal_lcd_font_GB2312_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,SHOW_WORD_SIZE,(uint8_t *)"开始",BRRED,BLACK);
+		else if(lcd_display.stopwatch_ctrl==1)hal_lcd_font_GB2312_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,SHOW_WORD_SIZE,(uint8_t *)"停止",BRRED,BLACK);
+		else if(lcd_display.stopwatch_ctrl==2)hal_lcd_font_GB2312_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,SHOW_WORD_SIZE,(uint8_t *)"继续",BRRED,BLACK);
+
+		hal_lcd_font_GB2312_string(STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y,SHOW_WORD_SIZE,(uint8_t *)"清除",BRRED,BLACK);
+		hal_lcd_font_GB2312_string(STOPWATCH_WORD_X+190,STOPWATCH_WORD_Y,SHOW_WORD_SIZE,(uint8_t *)"离开",BRRED,BLACK);
+	}
+	lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
+}
 static void key_null(void)
 {
 	
@@ -571,7 +646,12 @@ static void key1_short(void)
 	  lcd_display.real_state=LCD_DISPLAY_SYSTEM;
 		hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
 	}
-
+	else if(lcd_display.real_state==LCD_DISPLAY_STOPWATCH)
+	{
+		if(key_ctrl.up_down<(LASER_CTRL_STOPWATCH_NUM-1)) key_ctrl.up_down++;
+		else key_ctrl.up_down=0;
+		lcd_display.state=LCD_DISPLAY_STOPWATCH;
+	}
 	hal_set_key_press(KEY_NULL);
 }
 
@@ -610,6 +690,13 @@ static void key3_short(void)
 		{
 			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 		  lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+		  key_ctrl.up_down=0;
+		  hal_lcd_fill(LCD_X1,LCD_Y1,LCD_X2,LCD_Y2,BLACK);
+		}
+		else if(key_ctrl.up_down==3)
+		{
+			lcd_display.state=LCD_DISPLAY_STOPWATCH;//will turn to gif
+		  lcd_display.real_state=LCD_DISPLAY_STOPWATCH;
 		  key_ctrl.up_down=0;
 		  hal_lcd_fill(LCD_X1,LCD_Y1,LCD_X2,LCD_Y2,BLACK);
 		}
@@ -720,6 +807,43 @@ static void key3_short(void)
 		lcd_display.state=LCD_DISPLAY_SYSTEM;//will turn to gif
 	  lcd_display.real_state=LCD_DISPLAY_SYSTEM;
 		hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_STOPWATCH)
+	{
+		if(key_ctrl.up_down==0)
+		{
+			lcd_display.state=LCD_DISPLAY_STOPWATCH;
+		  lcd_display.real_state=LCD_DISPLAY_STOPWATCH;
+			if(lcd_display.stopwatch_ctrl==0)
+			{
+				lcd_display.stopwatch_ctrl=1;
+				hal_stopwatch_ctrl(BEGIN);
+			}
+			else if(lcd_display.stopwatch_ctrl==1)
+			{
+				lcd_display.stopwatch_ctrl=2;
+				hal_stopwatch_ctrl(STOP);
+			}
+			else if(lcd_display.stopwatch_ctrl==2)
+			{
+				lcd_display.stopwatch_ctrl=1;
+				hal_stopwatch_ctrl(BEGIN);
+			}
+		}
+		else if(key_ctrl.up_down==1)
+		{
+			lcd_display.state=LCD_DISPLAY_STOPWATCH;
+		  lcd_display.real_state=LCD_DISPLAY_STOPWATCH;
+			lcd_display.stopwatch_ctrl=0;
+			hal_stopwatch_timebuff_clear();
+		}
+		else if(key_ctrl.up_down==2)
+		{
+			lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
+		  lcd_display.real_state=LCD_DISPLAY_MENU;
+			hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
+		}
+		key_ctrl.up_down=0;
 	}
 	hal_set_key_press(KEY_NULL);
 }

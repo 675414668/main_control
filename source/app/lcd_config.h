@@ -7,6 +7,7 @@
 #define LASER_CTRL_STATE_SET_NUM      (3)
 #define LASER_CTRL_SYSTEM_NUM         (3)
 #define LASER_CTRL_LANGUAGE_SET_NUM     (3)
+#define LASER_CTRL_STOPWATCH_NUM     (3)
 
 #define COVER_MODE (0)
 #define UCOVER_MODE (1)
@@ -69,5 +70,12 @@
 #define SET_WORD_Y (SET_CURSOR_Y)
 #define SET_WORD_SIZE (16)
 #define SET_WORD_SIZE_C (12)
+
+#define STOPWATCH_X (30)
+#define STOPWATCH_Y (50)
+#define STOPWATCH_WORD_X (50)
+#define STOPWATCH_WORD_Y (150)
+#define STOPWATCH_WORD_SIZE (16)
+#define STOPWATCH_SIZE (32)
 
 #endif 

@@ -29,18 +29,32 @@ typedef struct
 }lcd_tim_ctrl_t;
 lcd_tim_ctrl_t lcd_tim_ctrl;
 
+typedef struct 
+{
+	uint8_t begin;
+	uint8_t timebuff[14];
+	uint16_t ms;
+	uint8_t sec;
+	uint8_t min;
+	uint8_t hour;
+}stopwatch_t;
+stopwatch_t stopwatch;
+
 static void bsp_lcd_gpio_init(void);
 static void bsp_lcd_driver_init(void);
 static void bsp_key_gpio_init(void);
 static void bsp_key_tim_init(void);
+static void bsp_stopwatch_data_init(void);
 static void bsp_key_scan(void);
 static void lcd_astronaut_image_change(void);
 static void lcd_waiting_time_change(void);
+static void bsp_timer_stopwatch(void);
 
 void bsp_lcd_init(void)
 {
 	bsp_lcd_gpio_init();//≥ı ºªØGPIO
 	bsp_lcd_driver_init();
+	bsp_stopwatch_data_init();
 }
 
 void bsp_key_init(void)
@@ -51,7 +65,6 @@ void bsp_key_init(void)
 	lcd_tim_ctrl.gif_timecount=0;
 	lcd_tim_ctrl.waiting_time=1;
 }
-
 void bsp_lcd_gpio_init(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -452,6 +465,77 @@ uint8_t bsp_lcd_get_waiting_time(void)
 {
 	return lcd_tim_ctrl.waiting_time;
 }
+static void bsp_stopwatch_data_init(void)
+{
+	stopwatch.timebuff[0]=91;
+	stopwatch.timebuff[1]=0x30;
+	stopwatch.timebuff[2]=0x30;
+	stopwatch.timebuff[3]=58;
+	stopwatch.timebuff[4]=0x30;
+	stopwatch.timebuff[5]=0x30;
+	stopwatch.timebuff[6]=58;
+	stopwatch.timebuff[7]=0x30;
+	stopwatch.timebuff[8]=0x30;
+	stopwatch.timebuff[9]=58;
+	stopwatch.timebuff[10]=0x30;
+	stopwatch.timebuff[11]=0x30;
+	stopwatch.timebuff[12]=0x30;
+	stopwatch.timebuff[13]=93;
+}
+static void bsp_timer_stopwatch(void)
+{
+	if(stopwatch.begin==1)
+	{
+		stopwatch.ms++;
+		if(stopwatch.ms==1000)
+		{
+			stopwatch.ms=0;
+			stopwatch.sec++;
+		}
+		if(stopwatch.sec==60)
+		{
+			stopwatch.sec=0;
+			stopwatch.min++;
+		}
+		if(stopwatch.min==60)
+		{
+			stopwatch.min=0;
+			stopwatch.hour++;
+		}
+		if(stopwatch.hour==24)
+		{
+			stopwatch.hour=0;
+		}
+		stopwatch.timebuff[0]=91;
+		stopwatch.timebuff[1]=stopwatch.hour/10+0x30;
+		stopwatch.timebuff[2]=stopwatch.hour%10+0x30;
+		stopwatch.timebuff[3]=58;
+		stopwatch.timebuff[4]=stopwatch.min/10+0x30;
+		stopwatch.timebuff[5]=stopwatch.min%10+0x30;
+		stopwatch.timebuff[6]=58;
+		stopwatch.timebuff[7]=stopwatch.sec/10+0x30;
+		stopwatch.timebuff[8]=stopwatch.sec%10+0x30;
+		stopwatch.timebuff[9]=58;
+		stopwatch.timebuff[10]=stopwatch.ms/100+0x30;
+		stopwatch.timebuff[11]=(stopwatch.ms/10)%10+0x30;
+		stopwatch.timebuff[12]=stopwatch.ms%10+0x30;
+		stopwatch.timebuff[13]=93;
+	}
+}
+
+void bsp_get_stopwatch_timebuff(uint8_t *data)
+{
+	memcpy(data,stopwatch.timebuff,14);
+}
+void bsp_stopwatch_timebuff_clear(void)
+{
+	bsp_stopwatch_data_init();
+}
+void bsp_stopwatch_ctrl(uint8_t state)
+{
+	stopwatch.begin=state;
+}
+	
 void KEY_TIM_IRQHANDLER(void)
 {
 	if(TIM_GetITStatus(KEY_TIM,TIM_IT_Update)==SET)
@@ -459,6 +543,7 @@ void KEY_TIM_IRQHANDLER(void)
 		bsp_key_scan();
 		lcd_astronaut_image_change();
 		lcd_waiting_time_change();
+		bsp_timer_stopwatch();
 		TIM_ClearITPendingBit(KEY_TIM,TIM_IT_Update);
 	}
 }
