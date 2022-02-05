@@ -17,7 +17,7 @@
 
 #define SHOW_WORD_X       (30)
 #define SHOW_WORD_Y       (0)
-#define SHOW_WORD_SIZE       (16)
+#define SHOW_WORD_SIZE    (16)
 
 #define PRESS_KEY_X    (50)
 #define PRESS_KEY_Y    (185)
