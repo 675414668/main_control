@@ -570,8 +570,8 @@ static void lcd_show_stopwatch(void)
 		else if(lcd_display.stopwatch_ctrl==1)hal_lcd_show_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,(uint8_t *)"stop",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		else if(lcd_display.stopwatch_ctrl==2)hal_lcd_show_string(STOPWATCH_WORD_X,STOPWATCH_WORD_Y,(uint8_t *)"continue",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 
-		hal_lcd_show_string(STOPWATCH_WORD_X+50,STOPWATCH_WORD_Y,(uint8_t *)"clear",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y,(uint8_t *)"exist",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(STOPWATCH_WORD_X+90,STOPWATCH_WORD_Y,(uint8_t *)"clear",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(STOPWATCH_WORD_X+190,STOPWATCH_WORD_Y,(uint8_t *)"exist",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 	}
 	else if(lcd_display.language_value==1)
 	{
