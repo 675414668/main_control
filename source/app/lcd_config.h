@@ -3,9 +3,10 @@
 
 #define MENU_OPTIONS_NUM              (6)
 #define LASER_CTRL_OPTIONS_NUM        (3)
-#define LASER_CTRL_MODE_SET_NUM       (2)
-#define LASER_CTRL_STATE_SET_NUM      (2)
-
+#define LASER_CTRL_MODE_SET_NUM       (3)
+#define LASER_CTRL_STATE_SET_NUM      (3)
+#define LASER_CTRL_SYSTEM_NUM         (3)
+#define LASER_CTRL_LANGUAGE_SET_NUM     (3)
 
 #define COVER_MODE (0)
 #define UCOVER_MODE (1)
@@ -32,6 +33,8 @@
 #define MENU_TITLE_Y (0)
 #define LASER_CTRL_TITLE_X (62)
 #define LASER_CTRL_TITLE_Y (0)
+#define SYSTEM_SET_TITLE_X (62)
+#define SYSTEM_SET_TITLE_Y (0)
 
 #define CURSOR_X  (30)
 #define CURSOR_Y  (TITLE_SIZE)
@@ -40,7 +43,7 @@
 #define MAIN_WORD_Y (TITLE_SIZE)
 #define MAIN_WORD_SIZE (16)
 
-#define BELONG_WORD_X (115)
+#define BELONG_WORD_X (120)
 #define BELONG_WORD_Y (TITLE_SIZE)
 #define BELONG_WORD_SIZE (MAIN_WORD_SIZE)
 

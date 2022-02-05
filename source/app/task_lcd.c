@@ -20,6 +20,8 @@ enum
 	LCD_DISPLAY_MENU,
 	LCD_DISPLAY_LASER_CTRL,
 	LCD_DISPLAY_LASER_CTRL_SET,
+	LCD_DISPLAY_SYSTEM,
+	LCD_DISPLAY_SYSTEM_SET,
 };
 
 typedef struct 
@@ -29,6 +31,7 @@ typedef struct
 	uint8_t astronaut_num;
 	uint8_t point_num;
 	uint8_t laser_set;//1 mode 2 state
+	uint8_t system_set;//1 language 
 }lcd_display_t;
 lcd_display_t lcd_display;
 
@@ -42,6 +45,7 @@ typedef  struct
 {
 	uint8_t mode_value;
 	uint8_t state_value;
+	uint8_t language_value;
 }laser_ctrl_t;
 laser_ctrl_t laser_ctrl;
 
@@ -54,6 +58,8 @@ static void lcd_show_menu(void);
 static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num);
 static void lcd_show_laser_control(void);
 static void lcd_show_laser_control_set(void);
+static void lcd_show_system(void);
+static void lcd_show_system_set(void);
 
 static void key_null(void);
 static void key1_short(void);
@@ -86,6 +92,8 @@ void task_lcd_display(void)
 		case LCD_DISPLAY_MENU:          { lcd_show_menu();              break ;}
 		case LCD_DISPLAY_LASER_CTRL:    { lcd_show_laser_control();     break ;}
 		case LCD_DISPLAY_LASER_CTRL_SET:{ lcd_show_laser_control_set(); break ;}
+		case LCD_DISPLAY_SYSTEM:        { lcd_show_system();            break ;}
+		case LCD_DISPLAY_SYSTEM_SET:    { lcd_show_system_set();        break ;}
 		default: {break;}
 			
 	}
@@ -110,9 +118,9 @@ static void lcd_show_init(void)
 {
 	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y,(uint8_t *)"system begin",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,(uint8_t *)"system clock init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"cpu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"usart init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usaer1 baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"mcu type:stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart init baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 	hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)"laser init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
@@ -184,11 +192,11 @@ static void lcd_show_menu(void)
 {
 	hal_lcd_show_string(MENU_TITLE_X,MENU_TITLE_Y,(uint8_t *)"MENU",BRRED,BLACK,TITLE_SIZE,COVER_MODE);
 	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y,(uint8_t *)"laser control",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
-	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,(uint8_t *)"RGB led control",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,(uint8_t *)"rgb led control",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,(uint8_t *)"stopwatch",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
-	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+3*MAIN_WORD_SIZE,(uint8_t *)"WiFi connection",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+3*MAIN_WORD_SIZE,(uint8_t *)"wifi connection",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+4*MAIN_WORD_SIZE,(uint8_t *)"game",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
-	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+5*MAIN_WORD_SIZE,(uint8_t *)"system set up",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+5*MAIN_WORD_SIZE,(uint8_t *)"system set",BRRED,BLACK,MAIN_WORD_SIZE,COVER_MODE);
 	lcd_show_cursor(CURSOR_X,CURSOR_Y,key_ctrl.up_down);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
@@ -204,7 +212,7 @@ static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
 		hal_lcd_fill(x,y,x+CURSOR_SIZE,y+CURSOR_SIZE*LASER_CTRL_OPTIONS_NUM,BLACK);
 	  hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
 	}
-	if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
+	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
 	{
 		if(lcd_display.laser_set==1)
 		{
@@ -216,6 +224,24 @@ static void lcd_show_cursor(uint8_t x,uint8_t y,uint8_t key_num)
 			hal_lcd_fill(x,y,x+CURSOR_SIZE,y+CURSOR_SIZE*LASER_CTRL_STATE_SET_NUM,BLACK);
 	    hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
 		}
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM)
+	{
+		hal_lcd_fill(x,y,x+CURSOR_SIZE,y+CURSOR_SIZE*LASER_CTRL_SYSTEM_NUM,BLACK);
+	  hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM_SET)
+	{
+		if(lcd_display.system_set==1)
+		{
+			hal_lcd_fill(x,y,x+CURSOR_SIZE,y+CURSOR_SIZE*LASER_CTRL_LANGUAGE_SET_NUM,BLACK);
+	    hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+		}
+//		else if(lcd_display.system_set==2)
+//		{
+//			hal_lcd_fill(x,y,x+CURSOR_SIZE,y+CURSOR_SIZE*LASER_CTRL_STATE_SET_NUM,BLACK);
+//	    hal_lcd_show_string(x,y+key_num*CURSOR_SIZE,(uint8_t *)"->",BRRED,BLACK,CURSOR_SIZE,COVER_MODE);
+//		}
 	}
 
 }
@@ -246,6 +272,7 @@ static void lcd_show_laser_control_set(void)
 		hal_lcd_show_string(195,37,(uint8_t *)"mode set",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y,(uint8_t *)"single",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,(uint8_t *)"auto",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y+2*SET_WORD_SIZE,(uint8_t *)"exist",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 		lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
 		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 	}
@@ -254,9 +281,38 @@ static void lcd_show_laser_control_set(void)
 		hal_lcd_fill(CURSOR_X,CURSOR_Y,CURSOR_X+CURSOR_SIZE,CURSOR_Y+CURSOR_SIZE*LASER_CTRL_OPTIONS_NUM,BLACK);//clear last cursor
 		hal_lcd_draw_rectangle(SET_RECTANGLE_X1,SET_RECTANGLE_Y1,SET_RECTANGLE_X2,SET_RECTANGLE_Y2,BRRED);
 		hal_lcd_draw_line(SET_LINE_X1,SET_LINE_Y1,SET_LINE_X2,SET_LINE_Y2,BRRED);
-		hal_lcd_show_string(192,37,(uint8_t *)"state set",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(208,37,(uint8_t *)"state",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y,(uint8_t *)"close",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,(uint8_t *)"open",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y+2*SET_WORD_SIZE,(uint8_t *)"exist",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
+		lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
+		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
+	}
+}
+
+static void lcd_show_system(void)
+{
+	hal_lcd_show_string(SYSTEM_SET_TITLE_X,SYSTEM_SET_TITLE_Y,(uint8_t *)"SYSTEM SET",BRRED,BLACK,TITLE_SIZE,COVER_MODE);
+	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y,(uint8_t *)"language:",BRRED,BLACK,BELONG_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+MAIN_WORD_SIZE,(uint8_t *)"about",BRRED,BLACK,BELONG_WORD_SIZE,COVER_MODE);
+	hal_lcd_show_string(MAIN_WORD_X,MAIN_WORD_Y+2*MAIN_WORD_SIZE,(uint8_t *)"exist",BRRED,BLACK,BELONG_WORD_SIZE,COVER_MODE);
+	if(laser_ctrl.language_value==0)      hal_lcd_show_string(BELONG_WORD_X,BELONG_WORD_Y,(uint8_t *)"English",BRRED,BLACK,BELONG_WORD_SIZE,COVER_MODE);
+	else if(laser_ctrl.language_value==1) hal_lcd_font_GB2312_string(BELONG_WORD_X,BELONG_WORD_Y,BELONG_WORD_SIZE,(uint8_t *)"简体中文",BRRED,BLACK);
+	lcd_show_cursor(CURSOR_X,CURSOR_Y,key_ctrl.up_down);
+	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
+}
+
+static void lcd_show_system_set(void)
+{
+	if(lcd_display.system_set==1) //set language
+	{
+		hal_lcd_fill(CURSOR_X,CURSOR_Y,CURSOR_X+CURSOR_SIZE,CURSOR_Y+CURSOR_SIZE*LASER_CTRL_OPTIONS_NUM,BLACK);//clear last cursor
+		hal_lcd_draw_rectangle(SET_RECTANGLE_X1,SET_RECTANGLE_Y1,SET_RECTANGLE_X2,SET_RECTANGLE_Y2,BRRED);
+		hal_lcd_draw_line(SET_LINE_X1,SET_LINE_Y1,SET_LINE_X2,SET_LINE_Y2,BRRED);
+		hal_lcd_show_string(195,37,(uint8_t *)"language",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
+		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y,(uint8_t *)"English",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
+		hal_lcd_font_GB2312_string(SET_WORD_X,SET_WORD_Y+SET_WORD_SIZE,SET_WORD_SIZE,(uint8_t *)"简体中文",BRRED,BLACK);
+		hal_lcd_show_string(SET_WORD_X,SET_WORD_Y+2*SET_WORD_SIZE,(uint8_t *)"exist",BRRED,BLACK,SET_WORD_SIZE,COVER_MODE);
 		lcd_show_cursor(SET_CURSOR_X,SET_CURSOR_Y,key_ctrl.up_down);
 		lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 	}
@@ -303,6 +359,21 @@ static void key1_short(void)
 		  lcd_display.state=LCD_DISPLAY_LASER_CTRL_SET;
 		}
 	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM)
+	{
+		if(key_ctrl.up_down<(LASER_CTRL_SYSTEM_NUM-1)) key_ctrl.up_down++;
+		else key_ctrl.up_down=0;
+		lcd_display.state=LCD_DISPLAY_SYSTEM;
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM_SET)
+	{
+		if(lcd_display.system_set==1)
+		{
+			if(key_ctrl.up_down<(LASER_CTRL_MODE_SET_NUM-1)) key_ctrl.up_down++;
+		  else key_ctrl.up_down=0;
+		  lcd_display.state=LCD_DISPLAY_SYSTEM_SET;
+		}
+	}
 
 	hal_set_key_press(KEY_NULL);
 }
@@ -336,12 +407,22 @@ static void key3_short(void)
 		key_ctrl.up_down=0;
 		hal_lcd_fill(LCD_X1,LCD_Y1,LCD_X2,LCD_Y2,BLACK);
 	}
-	else if(lcd_display.real_state==LCD_DISPLAY_MENU && key_ctrl.up_down==0)
+	else if(lcd_display.real_state==LCD_DISPLAY_MENU)
 	{
-		lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
-		lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
-		key_ctrl.up_down=0;
-		hal_lcd_fill(LCD_X1,LCD_Y1,LCD_X2,LCD_Y2,BLACK);
+		if(key_ctrl.up_down==0)
+		{
+			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
+		  lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+		  key_ctrl.up_down=0;
+		  hal_lcd_fill(LCD_X1,LCD_Y1,LCD_X2,LCD_Y2,BLACK);
+		}
+		else if(key_ctrl.up_down==5)
+		{
+			lcd_display.state=LCD_DISPLAY_SYSTEM;//will turn to gif
+		  lcd_display.real_state=LCD_DISPLAY_SYSTEM;
+		  key_ctrl.up_down=0;
+		  hal_lcd_fill(LCD_X1,LCD_Y1,LCD_X2,LCD_Y2,BLACK);
+		}
 	}
 	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL)
 	{
@@ -361,7 +442,7 @@ static void key3_short(void)
 	}
 	else if(lcd_display.real_state==LCD_DISPLAY_LASER_CTRL_SET)
 	{
-		if(lcd_display.laser_set==1)
+		if(lcd_display.laser_set==1 && key_ctrl.up_down!=(LASER_CTRL_MODE_SET_NUM-1))
 		{
 			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
@@ -370,12 +451,68 @@ static void key3_short(void)
 			key_ctrl.up_down=0;
 			lcd_display.laser_set=0;
 		}
-		if(lcd_display.laser_set==2)
+		else if(lcd_display.laser_set==2 && key_ctrl.up_down!=(LASER_CTRL_STATE_SET_NUM-1))
 		{
 			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
 			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
 			hal_lcd_fill(SET_RECTANGLE_X1,SET_RECTANGLE_Y1,SET_RECTANGLE_X2+1,SET_RECTANGLE_Y2+1,BLACK);
 			laser_ctrl.state_value=key_ctrl.up_down;
+			key_ctrl.up_down=0;
+			lcd_display.laser_set=0;
+		}
+		if(key_ctrl.up_down==(LASER_CTRL_MODE_SET_NUM-1)||key_ctrl.up_down==(LASER_CTRL_STATE_SET_NUM-1))
+		{
+			lcd_display.state=LCD_DISPLAY_LASER_CTRL;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_LASER_CTRL;
+			hal_lcd_fill(SET_RECTANGLE_X1,SET_RECTANGLE_Y1,SET_RECTANGLE_X2+1,SET_RECTANGLE_Y2+1,BLACK);
+			key_ctrl.up_down=0;
+			lcd_display.laser_set=0;
+		}
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM)
+	{
+		if(key_ctrl.up_down==0)
+		{
+			lcd_display.state=LCD_DISPLAY_SYSTEM_SET;//will turn to gif
+		  lcd_display.real_state=LCD_DISPLAY_SYSTEM_SET;
+		  lcd_display.system_set=key_ctrl.up_down+1;
+		}
+		else if(key_ctrl.up_down==1)
+		{
+			lcd_display.state=LCD_DISPLAY_INIT;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_INIT;
+			hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
+		}
+		else if(key_ctrl.up_down==2)
+		{
+			lcd_display.state=LCD_DISPLAY_MENU;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_MENU;
+			hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
+		}
+		else
+		{
+//			lcd_display.state=LCD_DISPLAY_LASER_CTRL_SET;//will turn to gif
+//		  lcd_display.real_state=LCD_DISPLAY_LASER_CTRL_SET;
+//		  lcd_display.laser_set=key_ctrl.up_down+1;
+		}
+		key_ctrl.up_down=0;
+	}
+	else if(lcd_display.real_state==LCD_DISPLAY_SYSTEM_SET)
+	{
+		if(lcd_display.system_set==1 && key_ctrl.up_down!=(LASER_CTRL_LANGUAGE_SET_NUM-1))
+		{
+			lcd_display.state=LCD_DISPLAY_SYSTEM;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_SYSTEM;
+			hal_lcd_fill(SET_RECTANGLE_X1,SET_RECTANGLE_Y1,SET_RECTANGLE_X2+1,SET_RECTANGLE_Y2+1,BLACK);
+			laser_ctrl.language_value=key_ctrl.up_down;
+			key_ctrl.up_down=0;
+			lcd_display.system_set=0;
+		}
+		if(key_ctrl.up_down==(LASER_CTRL_LANGUAGE_SET_NUM-1))
+		{
+			lcd_display.state=LCD_DISPLAY_SYSTEM;//will turn to gif
+			lcd_display.real_state=LCD_DISPLAY_SYSTEM;
+			hal_lcd_fill(SET_RECTANGLE_X1,SET_RECTANGLE_Y1,SET_RECTANGLE_X2+1,SET_RECTANGLE_Y2+1,BLACK);
 			key_ctrl.up_down=0;
 			lcd_display.laser_set=0;
 		}
