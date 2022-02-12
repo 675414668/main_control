@@ -4,11 +4,13 @@
 #include "stdio.h"
 #include "string.h"
 
-void bsp_usart_init(void);
-uint8_t bsp_get_usart_rx_flag(void);
-void bsp_clear_usart_rx_flag(void);
-void bsp_get_usart_rx_data(uint8_t *data);
-uint8_t bsp_get_usart_rx_count (void);
-void bsp_clear_usart_rx_count (void);
-void bsp_clear_usart_rx_buff (void);
+#define USART_COM              USART0
+#define USART_COM_RCU          RCU_USART0
+#define USART_COM_IRQn         USART1_IRQn
+#define USART_COM_PORT         GPIOB
+#define RCU_USART_COM_PORT     RCU_GPIOB
+#define USART_COM_TX_PIN       GPIO_PIN_6
+#define USART_COM_RX_PIN       GPIO_PIN_7
+
+void bsp_usart_com_init(uint32_t boadrate);
 #endif

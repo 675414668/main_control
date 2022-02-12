@@ -13,7 +13,7 @@ int main(void)
   task_lcd_init();
 	
 	printf("system begin\r\n");
-	printf("cpu frequency:%d\r\n",hal_get_clock_frequency(SYSCLK_FREQUENCY));
+//	printf("cpu frequency:%d\r\n",hal_get_clock_frequency(SYSCLK_FREQUENCY));
   printf("HARDWARE_VERSION:%s\r\n",HARDWARE_VERSION);
 	printf("SOFTWARE_VERSION:%s\r\n",SOFTWARE_VERSION);
     while(1)

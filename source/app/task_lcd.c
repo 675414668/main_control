@@ -1,6 +1,6 @@
 #include "task_lcd.h"
 #include "hal_usart.h"
-#include "pic.h"
+//#include "pic.h"
 
 enum 
 {
@@ -212,24 +212,24 @@ static void lcd_press_any_key_to_continuet(void)
 static void lcd_show_astronaut(void)
 {
 	lcd_display.astronaut_num=hal_lcd_get_astronaut_image_num();
-	switch (lcd_display.astronaut_num)
-	{
-		case 1: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_0); break;}
-		case 2: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_1); break;}
-		case 3: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_2); break;}
-		case 4: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_3); break;}
-		case 5: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_4); break;}
-		case 6: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_5); break;}
-		case 7: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_6); break;}
-		case 8: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_7); break;}
-		case 9: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_8); break;}
-		case 10:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_9); break;}
-		case 11:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_10); break;}
-		case 12:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_11); break;}
-		case 13:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_12); break;}
-		case 14:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_13); break;}
-		default:{break;}
-	}
+//	switch (lcd_display.astronaut_num)
+//	{
+//		case 1: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_0); break;}
+//		case 2: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_1); break;}
+//		case 3: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_2); break;}
+//		case 4: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_3); break;}
+//		case 5: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_4); break;}
+//		case 6: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_5); break;}
+//		case 7: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_6); break;}
+//		case 8: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_7); break;}
+//		case 9: {hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_8); break;}
+//		case 10:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_9); break;}
+//		case 11:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_10); break;}
+//		case 12:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_11); break;}
+//		case 13:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_12); break;}
+//		case 14:{hal_lcd_show_picture(ASTRONAUT_IMAGE_X1,ASTRONAUT_IMAGE_Y1,ASTRONAUT_IMAGE_X_SIZE,ASTRONAUT_IMAGE_Y_SIZE,gImage_13); break;}
+//		default:{break;}
+//	}
 	lcd_press_any_key_to_continuet();
 	lcd_display.astronaut_num=0;
 }

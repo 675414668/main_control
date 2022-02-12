@@ -10,7 +10,7 @@
 ******************************************************************************/
 void hal_lcd_fill(uint16_t xsta,uint16_t ysta,uint16_t xend,uint16_t yend,uint16_t color)
 {
-	u16 i,j; 
+	uint16_t i,j; 
 	bsp_lcd_set_addr(xsta,ysta,xend-1,yend-1);//…Ë÷√œ‘ æ∑∂Œß
 	for(i=ysta;i<yend;i++)
 	{													   	 	
