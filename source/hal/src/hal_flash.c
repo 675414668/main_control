@@ -10,7 +10,8 @@ void hal_flash_user_data_init(void)
 	user_data[0]=bsp_flash_read_word(USER_DATA_ADDR);
 	if(user_data[0]==0xFFFFFFFF)//data init
 	{
-		user_data[LANGUAGE_DATA]=0;//English
+		user_data[CHAR_MCU_TYPE]=MCU_TYPE;
+		user_data[CHAR_LANGUAGE_DATA]=1;//CHINESE
 		
 		sector=bsp_flash_get_sector(USER_DATA_ADDR);
 		bsp_flash_erase_sector(sector);
@@ -55,9 +56,9 @@ uint32_t hal_flash_get_sector(uint32_t addr)
 void hal_set_user_data(uint8_t data_state,uint32_t data)
 {
 	uint32_t sector=0;
-	if(data_state==LANGUAGE_DATA)
+	if(data_state==CHAR_LANGUAGE_DATA)
 	{
-		user_data[LANGUAGE_DATA]=data;
+		user_data[CHAR_LANGUAGE_DATA]=data;
 	}
 	sector=bsp_flash_get_sector(USER_DATA_ADDR);
 	bsp_flash_erase_sector(sector);

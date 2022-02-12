@@ -41,6 +41,7 @@ typedef struct
 	uint8_t language_value;
 	uint8_t stopwatch_timebuff[15];
 	uint8_t stopwatch_ctrl;//0 stop 1 begin
+	uint8_t mcu_type;
 }lcd_display_t;
 lcd_display_t lcd_display;
 
@@ -92,7 +93,8 @@ static void lcd_data_init(void)
 {
 	lcd_display.state=LCD_DISPLAY_INIT;
 	lcd_display.real_state=LCD_DISPLAY_INIT;
-	lcd_display.language_value=hal_get_user_data(LANGUAGE_DATA);
+	lcd_display.language_value=hal_get_user_data(CHAR_LANGUAGE_DATA);
+	lcd_display.mcu_type=hal_get_user_data(CHAR_MCU_TYPE);
 
 }
 void task_lcd_display(void)
@@ -134,8 +136,16 @@ static void lcd_show_init(void)
 	{
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y,(uint8_t *)"system begin",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,(uint8_t *)"system clock init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"mcu type:stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		if(lcd_display.mcu_type==1)
+		{
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"mcu type:stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		  hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		}
+		else if (lcd_display.mcu_type==2)
+		{
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"mcu type:gd32f130c8t6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		  hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:72M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		}
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart init baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
 		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard init",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
@@ -148,8 +158,17 @@ static void lcd_show_init(void)
 	{
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y,SHOW_WORD_SIZE_C,(uint8_t *)"系统开启",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"系统时钟初始化完毕",BRRED,BLACK);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":84M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		if(lcd_display.mcu_type==1)
+		{
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		  hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":84M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		}
+		else if(lcd_display.mcu_type==2)
+		{
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":gd32f130c8t6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		  hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":72M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+
+		}
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"串口波特率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)":115200",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"屏幕初始化完毕",BRRED,BLACK);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"键盘初始化完毕",BRRED,BLACK);
@@ -158,27 +177,8 @@ static void lcd_show_init(void)
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+9*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"硬件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+9*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+10*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"软件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+10*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 	}
-
-	//hal_lcd_show_string(30,190,(uint8_t *)"Loading",BRRED,BLACK,32,0);
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
-
-//static void lcd_waiting_point(void)
-//{
-//	lcd_display.point_num=hal_lcd_get_waiting_point();
-//	if(lcd_display.real_state==LCD_DISPLAY_INIT)
-//	{
-//		switch (lcd_display.point_num)
-//		{
-//			case 1:{hal_lcd_show_string(145,190,(uint8_t *)"   ",BRRED,BLACK,32,0); break;}
-//			case 2:{hal_lcd_show_string(145,190,(uint8_t *)".  ",BRRED,BLACK,32,0); break;}
-//			case 3:{hal_lcd_show_string(145,190,(uint8_t *)".. ",BRRED,BLACK,32,0); break;}
-//			case 4:{hal_lcd_show_string(145,190,(uint8_t *)"...",BRRED,BLACK,32,0); break;}
-//			default:{break;}
-//		}
-//		lcd_display.point_num=0;
-//	}
-//}
 
 static void lcd_press_any_key_to_continuet(void)
 {
@@ -535,27 +535,53 @@ static void lcd_show_system_about(void)
 {
 	if(lcd_display.language_value==0)
 	{
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y,(uint8_t *)"mcu type:stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"flash:256kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"ram:48kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd type:240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard:double button",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
-		hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		if(hal_get_user_data(CHAR_MCU_TYPE)==1)
+		{
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y,(uint8_t *)"mcu type:stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:84M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"flash:256kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"ram:48kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd type:240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard:double button",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		}
+		else if(hal_get_user_data(CHAR_MCU_TYPE)==2)
+		{
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y,(uint8_t *)"mcu type:gd32f130c8t6",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,(uint8_t *)"mcu frequency:72M HZ",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)"flash:64kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)"ram:8kb",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)"usart baudrate:115200",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)"lcd type:240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)"keyboard:double button",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)"hardware version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+			hal_lcd_show_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)"software version:V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE,COVER_MODE);
+		}
+		
 	}
 	else if(lcd_display.language_value==1)
 	{
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y,(uint8_t *)":stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+1*SHOW_WORD_SIZE,(uint8_t *)":84M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"存储空间",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":256kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":64kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"串口波特率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)":115200",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"显示屏",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)":240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"键盘",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+2*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)":",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);hal_lcd_font_GB2312_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"双按键",BRRED,BLACK);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"硬件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
-		hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"软件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		if(hal_get_user_data(CHAR_MCU_TYPE)==1)
+		{
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y,(uint8_t *)":stm32f401rct6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+1*SHOW_WORD_SIZE,(uint8_t *)":84M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"存储空间",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":256kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":64kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		}
+		else if(hal_get_user_data(CHAR_MCU_TYPE)==2)
+		{
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y,SHOW_WORD_SIZE_C,(uint8_t *)"芯片型号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y,(uint8_t *)":gd32f130c8t6",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行频率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+1*SHOW_WORD_SIZE,(uint8_t *)":72M HZ",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+2*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"存储空间",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+2*SHOW_WORD_SIZE,(uint8_t *)":64kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+3*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"运行内存",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+4*SHOW_WORD_SIZE_C,SHOW_WORD_Y+3*SHOW_WORD_SIZE,(uint8_t *)":8kb",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+		}
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+4*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"串口波特率",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+4*SHOW_WORD_SIZE,(uint8_t *)":115200",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+5*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"显示屏",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+5*SHOW_WORD_SIZE,(uint8_t *)":240x290 TFT-LCD",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"键盘",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+2*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,(uint8_t *)":",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);hal_lcd_font_GB2312_string(SHOW_WORD_X+3*SHOW_WORD_SIZE_C,SHOW_WORD_Y+6*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"双按键",BRRED,BLACK);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+7*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"硬件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+7*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
+			hal_lcd_font_GB2312_string(SHOW_WORD_X,SHOW_WORD_Y+8*SHOW_WORD_SIZE,SHOW_WORD_SIZE_C,(uint8_t *)"软件版本号",BRRED,BLACK);hal_lcd_show_string(SHOW_WORD_X+5*SHOW_WORD_SIZE_C,SHOW_WORD_Y+8*SHOW_WORD_SIZE,(uint8_t *)":V1.0.0",BRRED,BLACK,SHOW_WORD_SIZE_C,COVER_MODE);
 	}
 	lcd_display.state=LCD_DISPLAY_ASTRONAUT;
 }
@@ -789,7 +815,7 @@ static void key3_short(void)
 			lcd_display.real_state=LCD_DISPLAY_SYSTEM;
 			hal_lcd_fill(LCD_X1,LCD_X1,LCD_X2,LCD_Y2,BLACK);
 			lcd_display.language_value=key_ctrl.up_down;
-			hal_set_user_data(LANGUAGE_DATA,lcd_display.language_value);
+			hal_set_user_data(CHAR_LANGUAGE_DATA,lcd_display.language_value);
 			key_ctrl.up_down=0;
 			lcd_display.system_set=0;
 		}

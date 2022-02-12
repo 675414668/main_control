@@ -12,8 +12,10 @@
 #define ADDR_SECTOR5   (0x08020000)  //128KB
 
 #define USER_DATA_ADDR (0x08020000)
-#define USER_DATA_NUM  (5)
-#define LANGUAGE_DATA  (0)
+#define USER_DATA_NUM  (2)
+#define MCU_TYPE       (1)  //写入1为stm32，写入2为gd32f130c8t6
+#define CHAR_MCU_TYPE  (0)  //数组地址0，
+#define CHAR_LANGUAGE_DATA  (1)
 
 void bsp_flash_ulock(void);
 void bsp_flash_erase_sector(uint32_t sector);
